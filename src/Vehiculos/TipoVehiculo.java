@@ -12,8 +12,9 @@ public enum TipoVehiculo {
     SEDAN("Sedan"),
     SUV("Suv"),
     PICKUP("Pick-Up"),
-    TRUCK("Camion"),
-    MOTORCYCLE("Motocicleta");
+    VAN("Van"),
+    MINIVAN("Mini Van"),
+    MINIBUS("Mini Bus");
     
     private String type;
 
