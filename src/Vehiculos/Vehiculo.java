@@ -55,17 +55,24 @@ public class Vehiculo {
         this.state = state;
     }
 
-    public Vehiculo(String plate, String brand, String model, String year, TipoVehiculo type) {
+    public Vehiculo(String plate, String brand, String model, LocalDate year, TipoVehiculo type) {
         if(plate.matches("^[\\w]{3}-[1-9]{3}$")){
          this.plate = plate;   
         }
         this.brand = brand;
         this.model = model;
-        if(UtilDate.isNotFutureDate(year) && UtilDate.isNotOlderThan(year)){
+        if(UtilDate.isNotFutureDate(year) && UtilDate.isNotOlderThan20(year)){
          this.year = year;   
         }
         this.type = type;
         this.state = EstadoVehiculo.AVAILABLE;
     }
+
+    @Override
+    public String toString() {
+        return "Plate: "+ plate + " Brand: " + brand + " Model: " + model + " Year: " + year + " Type: " + type + " State: " + state;
+    }
+    
+    
     
 }
