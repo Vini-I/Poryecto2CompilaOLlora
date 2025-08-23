@@ -59,7 +59,7 @@ public class Person {
         return mail.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");    
     }
     
-    public Person(String id, String name, LocalDate birthday,int years , String phone, String mail) {
+    public Person(String id, String name, LocalDate birthday, String phone, String mail) {
         if(validateId(id))
         throw new IllegalArgumentException("Invalid ID: " + id);
             this.id = id;
@@ -67,7 +67,7 @@ public class Person {
             this.name = name;
         if(UtilDate.isNotFutureDate(birthday))
             this.birthday = birthday;
-        this.years = UtilDate.calculateAge(years);
+        this.years =UtilDate.calculateAge(birthday);
         if(validatePhone(phone))
             this.phone = phone;
         if(validateMail(mail))
