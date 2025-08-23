@@ -2,37 +2,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Vehiculos;
+package Vehicles;
 
 import Lists.List;
 import java.util.HashMap;
+
 
 /**
  *
  * @author rodol
  */
-public class VehiculoList implements List<Vehiculo> {
+public class VehicleList implements List<Vehicle> {
     
-    HashMap<String, Vehiculo> map;
-    private static VehiculoList instance;
+    HashMap<String, Vehicle> map;
+    private static VehicleList instance;
     
-    public static VehiculoList getInstance(){
+    public static VehicleList getInstance(){
         if(instance == null){
-            instance = new VehiculoList();
+            instance = new VehicleList();
         }
         return instance;
     }
 
-    public HashMap<String, Vehiculo> getMap() {
+    public HashMap<String, Vehicle> getMap() {
         return map;
     }
 
-    private VehiculoList() {
+    private VehicleList() {
         this.map = new HashMap();
     }
 
     @Override
-    public boolean add(Vehiculo t) {
+    public boolean add(Vehicle t) {
         if (!map.containsKey(t.getPlate())) {
             map.put(t.getPlate(), t);
             return true;
@@ -41,14 +42,13 @@ public class VehiculoList implements List<Vehiculo> {
     }
 
     @Override
-    public Vehiculo find(Object id) {
-        String strId = String.valueOf(id);
+    public Vehicle find(Object id) {
+        String strId = String.valueOf(id);  
         return map.get(strId);
     }
 
     @Override
-    public boolean remove(Vehiculo t) {
-        return map.remove(t.getPlate(), map);
+    public boolean remove(Vehicle t){
+        return map.remove(t.getPlate()) != null;
     }
-    
 }

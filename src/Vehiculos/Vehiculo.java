@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Vehiculos;
-import Lists.List;
+package Vehicles;
+import Exceptions.InvalidPlateException;
+import Exceptions.InvalidYearException;
 import Utils.UtilDate;
 import java.time.LocalDate;
 
@@ -11,13 +12,13 @@ import java.time.LocalDate;
  *
  * @author rodol
  */
-public class Vehiculo {
+public class Vehicle {
     private String plate;
     private String brand;
     private String model;
     private LocalDate year;
-    private TipoVehiculo type;
-    private EstadoVehiculo state;
+    private VehicleType type;
+    private VehicleState state;
 
     public String getPlate() {
         return plate;
@@ -35,11 +36,11 @@ public class Vehiculo {
         return year;
     }
 
-    public TipoVehiculo getType() {
+    public VehicleType getType() {
         return type;
     }
 
-    public EstadoVehiculo getState() {
+    public VehicleState getState() {
         return state;
     }
 
@@ -47,25 +48,27 @@ public class Vehiculo {
         this.model = model;
     }
 
-    public void setType(TipoVehiculo type) {
+    public void setType(VehicleType type) {
         this.type = type;
     }
 
-    public void setState(EstadoVehiculo state) {
+    public void setState(VehicleState state) {
         this.state = state;
     }
 
-    public Vehiculo(String plate, String brand, String model, LocalDate year, TipoVehiculo type) {
-        if(plate.matches("^[\\w]{3}-[1-9]{3}$")){
-         this.plate = plate;   
+    public Vehicle(String plate, String brand, String model, LocalDate year, VehicleType type) throws InvalidPlateException, InvalidYearException {
+        if(!plate.matches("^[A-Z]{3}-[1-9]{3}$")){
+            throw new InvalidPlateException();
         }
+        if(!UtilDate.isNotFutureDate(year) || !UtilDate.isNotOlderThan20(year)){
+            throw new InvalidYearException();
+        }
+        this.plate = plate;
+        this.year = year;
         this.brand = brand;
         this.model = model;
-        if(UtilDate.isNotFutureDate(year) && UtilDate.isNotOlderThan20(year)){
-         this.year = year;   
-        }
         this.type = type;
-        this.state = EstadoVehiculo.AVAILABLE;
+        this.state = VehicleState.AVAILABLE;
     }
 
     @Override

@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
  */
-package Vehiculos;
+package Vehicles;
 
 /**
  *
  * @author rodol
  */
-public enum EstadoVehiculo {
+public enum VehicleState {
     AVAILABLE("Disponible"),
     INMAINTENANCE("Mantenimiento"),
     RENTED("Alquilado");
@@ -19,7 +19,7 @@ public enum EstadoVehiculo {
         return state;
     }
 
-    private EstadoVehiculo(String state) {
+    private VehicleState(String state) {
         this.state = state;
     }
 

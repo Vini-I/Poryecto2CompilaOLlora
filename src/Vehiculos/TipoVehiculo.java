@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
  */
-package Vehiculos;
+package Vehicles;
 
 /**
  *
  * @author rodol
  */
-public enum TipoVehiculo {
+public enum VehicleType {
     SEDAN("Sedan"),
     SUV("Suv"),
     PICKUP("Pick-Up"),
@@ -22,7 +22,7 @@ public enum TipoVehiculo {
         return type;
     }
 
-    private TipoVehiculo(String type) {
+    private VehicleType(String type) {
         this.type = type;
     }
 
