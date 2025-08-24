@@ -254,8 +254,10 @@ public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, 
     private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
         int row = tblVehicles.getSelectedRow();
         selectedVehicle(row);
-        setVisible(false);
-        this.dispose();
+        if (vehicle != null) {
+            setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnShowActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -282,15 +284,17 @@ public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, 
     public void delete() {
         int row = tblVehicles.getSelectedRow();
         selectedVehicle(row);
-        try {
-            int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas eliminar este vehiculo?", "Confirmar Eliminacion");
-            if (decision == JOptionPane.YES_OPTION) {
-                manager.removeVehicle(vehicle);
-                loadTable();
-            }
+        if (vehicle != null) {
+            try {
+                int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas eliminar este vehiculo?", "Confirmar Eliminacion");
+                if (decision == JOptionPane.YES_OPTION) {
+                    manager.removeVehicle(vehicle);
+                    loadTable();
+                }
 
-        } catch (RentedVehicleException e) {
-            UtilGui.showErrorMessage(this, e.getMessage(), "Error al eliminar");
+            } catch (RentedVehicleException e) {
+                UtilGui.showErrorMessage(this, e.getMessage(), "Error al eliminar");
+            }
         }
     }
 
@@ -299,9 +303,11 @@ public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, 
         int row = tblVehicles.getSelectedRow();
         selectedVehicle(row);
 
-        DiaUpdateVehicle frmUpdate = new DiaUpdateVehicle(this, true, vehicle, manager);
-        frmUpdate.setVisible(true);
-        loadTable();
+        if (vehicle != null) {
+            DiaUpdateVehicle frmUpdate = new DiaUpdateVehicle(this, true, vehicle, manager);
+            frmUpdate.setVisible(true);
+            loadTable();
+        }
     }
 
     private void selectedVehicle(int row) {
