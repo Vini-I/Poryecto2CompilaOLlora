@@ -1,11 +1,12 @@
 
 package Persons;
 
+import Exceptions.InvalidAgeExcepcion;
 import Utils.UtilDate;
 import java.time.LocalDate;
 
 
-public class Person {
+public abstract class  Person {
     
     public String id;
     public String name; 
@@ -56,8 +57,11 @@ public class Person {
     }
             
     private static boolean validateMail(String mail){
-        return mail.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");    
+        return mail.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");  
     }
+        
+    
+
     
     public Person(String id, String name, LocalDate birthday, String phone, String mail) {
         if(validateId(id))
@@ -65,7 +69,7 @@ public class Person {
             this.id = id;
         if( name != null && !name.trim().isEmpty())  
             this.name = name;
-        if(UtilDate.isNotFutureDate(birthday))
+        if(UtilDate.isNotFutureDate(birthday) && UtilDate.isLegalAge(birthday))
             this.birthday = birthday;
         this.years =UtilDate.calculateAge(birthday);
         if(validatePhone(phone))
