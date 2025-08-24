@@ -4,18 +4,33 @@
  */
 package Vehicles;
 
+import Exceptions.InvalidPlateException;
+import Exceptions.InvalidYearException;
+import Utils.UtilDate;
+import Utils.UtilGui;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import GuiList.Requireable;
+import GuiList.Showable;
+import GuiList.Updatable;
+
 /**
  *
  * @author rodol
  */
-public class DiaUpdateVehicle extends javax.swing.JDialog {
-
+public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable, Showable, Updatable {
+        private static Vehicle vehicle;
+        private static VehicleManager manager;
     /**
      * Creates new form DiaUpdateVehicle
      */
-    public DiaUpdateVehicle(java.awt.Frame parent, boolean modal) {
+    public DiaUpdateVehicle(java.awt.Dialog parent, boolean modal,Vehicle vehicle, VehicleManager manager) {
         super(parent, modal);
+        this.vehicle = vehicle;
+        this.manager = manager;
         initComponents();
+        showTypes();
+        showData();
     }
 
     /**
@@ -27,11 +42,12 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btgStates = new javax.swing.ButtonGroup();
         jLabel5 = new javax.swing.JLabel();
-        btnRentado = new javax.swing.JRadioButton();
+        rbRented = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
         txtYear = new javax.swing.JFormattedTextField();
-        btnMantenimiento = new javax.swing.JRadioButton();
+        rbMaintenance = new javax.swing.JRadioButton();
         txtType = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -45,7 +61,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         txtModel = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
-        btnDisponible = new javax.swing.JRadioButton();
+        rbAvailable = new javax.swing.JRadioButton();
         btnUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -53,18 +69,15 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Año");
 
-        btnRentado.setText("Rentado");
-        btnRentado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRentadoActionPerformed(evt);
-            }
-        });
+        btgStates.add(rbRented);
+        rbRented.setText("Rentado");
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/rentedIcon.png"))); // NOI18N
 
         txtYear.setEditable(false);
 
-        btnMantenimiento.setText("Mantenimiento");
+        btgStates.add(rbMaintenance);
+        rbMaintenance.setText("Mantenimiento");
 
         txtType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         txtType.addActionListener(new java.awt.event.ActionListener() {
@@ -103,10 +116,21 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
         jLabel4.setText("Modelo");
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/cancelIcon.png"))); // NOI18N
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
-        btnDisponible.setText("Disponible");
+        btgStates.add(rbAvailable);
+        rbAvailable.setText("Disponible");
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/updateIcon.png"))); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,7 +158,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
                                 .addGap(21, 21, 21)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
-                                    .addComponent(btnDisponible, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(80, 80, 80)
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -143,17 +167,20 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
                                     .addComponent(jLabel5)
                                     .addComponent(txtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(155, 155, 155)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(233, 233, 233))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtModel)
+                                        .addGap(138, 138, 138)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(70, 70, 70)
                                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btnRentado, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbRented, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnMantenimiento)
+                                        .addComponent(rbMaintenance)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel11))))
                             .addGroup(layout.createSequentialGroup()
@@ -189,7 +216,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
                     .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(btnDisponible))
+                        .addComponent(rbAvailable))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -199,10 +226,10 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(btnRentado)))
+                                .addComponent(rbRented)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnMantenimiento)
+                            .addComponent(rbMaintenance)
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
@@ -227,14 +254,78 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRentadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRentadoActionPerformed
-
     private void txtTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTypeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTypeActionPerformed
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+       if (validateRequiere()) {
+            update();
+        } else {
+            UtilGui.showErrorMessage(this, "El campo de modelo no puede estar vacío", "Error");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas cancelar la actualizacion del vehiculo?", "Confirmar Eliminacion");
+        if (decision == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+     private void showTypes() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        for (VehicleType type : VehicleType.values()) {
+            model.addElement(type);
+        }
+        txtType.setModel(model);
+    }
+
+    @Override
+    public boolean validateRequiere() {
+       return UtilGui.validateRequiere(txtModel);
+    }
+
+    @Override
+    public void update() {
+        String newModel = txtModel.getText();
+        VehicleType newType = (VehicleType) txtType.getSelectedItem();
+        VehicleState newState = null;
+
+        if (rbAvailable.isSelected()) {
+            newState = VehicleState.AVAILABLE;
+        } else if (rbRented.isSelected()) {
+            newState = VehicleState.RENTED;
+        } else if (rbMaintenance.isSelected()) {
+            newState = VehicleState.INMAINTENANCE;
+        }
+
+        try {
+            Vehicle updatedVehicle = new Vehicle(vehicle.getPlate(), vehicle.getBrand(), newModel, vehicle.getYear(), newType);
+            updatedVehicle.setState(newState);
+
+            if (!manager.updateVehicle(updatedVehicle)) {
+                UtilGui.showErrorMessage(this, "Error al actualizar el vehículo.", "Error");
+            }
+            this.dispose();
+        } catch (InvalidPlateException | InvalidYearException e) {
+            UtilGui.showErrorMessage(this, "Error al obtener el vehiculo: " + e.getMessage(), "Error");
+        }
+    }
+
+    @Override
+    public void showData() {
+        if (vehicle == null) {
+            UtilGui.showErrorMessage(this, "Debe especificar el vehículo a actualizar", "Error");
+            return;
+        }
+
+        txtPlate.setText(vehicle.getPlate());
+        txtBrand.setText(vehicle.getBrand());
+        txtModel.setText(vehicle.getModel());
+        txtYear.setText(UtilDate.toString(vehicle.getYear()));
+        txtType.setSelectedItem(vehicle.getType());
+    }
     /**
      * @param args the command line arguments
      */
@@ -265,7 +356,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DiaUpdateVehicle dialog = new DiaUpdateVehicle(new javax.swing.JFrame(), true);
+                DiaUpdateVehicle dialog = new DiaUpdateVehicle(new javax.swing.JDialog(), true, vehicle, manager);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -278,10 +369,8 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btgStates;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JRadioButton btnDisponible;
-    private javax.swing.JRadioButton btnMantenimiento;
-    private javax.swing.JRadioButton btnRentado;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -293,10 +382,15 @@ public class DiaUpdateVehicle extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JRadioButton rbAvailable;
+    private javax.swing.JRadioButton rbMaintenance;
+    private javax.swing.JRadioButton rbRented;
     private javax.swing.JTextField txtBrand;
     private javax.swing.JTextField txtModel;
     private javax.swing.JFormattedTextField txtPlate;
     private javax.swing.JComboBox<String> txtType;
     private javax.swing.JFormattedTextField txtYear;
     // End of variables declaration//GEN-END:variables
+
+    
 }
