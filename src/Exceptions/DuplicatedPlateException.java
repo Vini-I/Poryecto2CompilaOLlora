@@ -8,10 +8,10 @@ package Exceptions;
  *
  * @author rodol
  */
-public class InvalidPlateException extends Exception {
+public class DuplicatedPlateException extends Exception {
 
-    public InvalidPlateException() {
-        super("El formato de la placa no es valido. Utilice algo como AAA-111");
+    public DuplicatedPlateException() {
+        super("Ya existe un vehiculo con ese numero de placa");
     }
     
 }
