@@ -4,19 +4,24 @@
  */
 package Vehicles;
 
+import Exceptions.RentedVehicleException;
 import Utils.UtilDate;
+import Utils.UtilGui;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import GuiList.Deletable;
+import GuiList.Updatable;
 
 /**
  *
  * @author rodol
  */
-public class DiaSearchVehicle extends javax.swing.JDialog {
+public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, Updatable {
 
-    private VehicleList list;
+    private VehicleManager manager;
     private Vehicle vehicle;
 
     private DefaultTableModel model;
@@ -29,24 +34,25 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
     public DiaSearchVehicle(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        list = VehicleList.getInstance();
+        model = (DefaultTableModel) tblVehicles.getModel();
+        sorter = new TableRowSorter<>(model);
+        tblVehicles.setRowSorter(sorter);
     }
-    
-    
-     public void setList(VehicleList list) {
-        this.list = list;
+
+    public void setManager(VehicleManager manager) {
+        this.manager = manager;
         loadTable();
     }
 
     public Vehicle getVehicle() {
         return vehicle;
     }
-    
+
     private void loadTable() {
-        HashMap<String, Vehicle> map = list.getMap();
+        HashMap<String, Vehicle> map = manager.getVehicleMap();
         model.setRowCount(0);
         for (Vehicle vehicle : map.values()) {
-            Object[] data = {vehicle.getPlate(), vehicle.getBrand(), vehicle.getModel(), UtilDate.toString(vehicle.getYear()), vehicle.getType(),vehicle.getState()};
+            Object[] data = {vehicle.getPlate(), vehicle.getBrand(), vehicle.getModel(), UtilDate.toString(vehicle.getYear()), vehicle.getType(), vehicle.getState()};
             model.addRow(data);
         }
     }
@@ -62,7 +68,7 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         btnShow = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVehicles = new javax.swing.JTable();
@@ -88,10 +94,10 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
             }
         });
 
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/cancel2Icon.png"))); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/cancel2Icon.png"))); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
 
@@ -149,6 +155,11 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
         });
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/update2Icon.png"))); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/removeIcon.png"))); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -202,7 +213,7 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(btnCancelar))
+                                .addComponent(btnCancel))
                             .addComponent(jLabel4))
                         .addGap(202, 202, 202))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -229,9 +240,9 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnShow)
-                    .addComponent(btnCancelar)
+                    .addComponent(btnCancel)
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
                 .addContainerGap())
@@ -241,20 +252,18 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
-        int row =tblVehicles.getSelectedRow();
-        if (row==-1){
-            UtilGui.showErrorMessage(this, "Debe seleccionar un vehiculo", "Error");
-            return;
-        }
-        String id=String.valueOf(tblVehicles.getValueAt(row,0));
-        vehicle=list.find(id);
+        int row = tblVehicles.getSelectedRow();
+        selectedVehicle(row);
         setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnShowActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas cancelar la busqueda?", "Confirmar Cancelar");
+        if (decision == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFilterActionPerformed
         rowFilter = RowFilter.regexFilter("(?i)" + txtFilter.getText());
@@ -262,8 +271,47 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
     }//GEN-LAST:event_txtFilterActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        delete();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    @Override
+    public void delete() {
+        int row = tblVehicles.getSelectedRow();
+        selectedVehicle(row);
+        try {
+            int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas eliminar este vehiculo?", "Confirmar Eliminacion");
+            if (decision == JOptionPane.YES_OPTION) {
+                manager.removeVehicle(vehicle);
+                loadTable();
+            }
+
+        } catch (RentedVehicleException e) {
+            UtilGui.showErrorMessage(this, e.getMessage(), "Error al eliminar");
+        }
+    }
+
+    @Override
+    public void update() {
+        int row = tblVehicles.getSelectedRow();
+        selectedVehicle(row);
+
+        DiaUpdateVehicle frmUpdate = new DiaUpdateVehicle(this, true, vehicle, manager);
+        frmUpdate.setVisible(true);
+        loadTable();
+    }
+
+    private void selectedVehicle(int row) {
+        if (row == -1) {
+            UtilGui.showErrorMessage(this, "Debe seleccionar un vehiculo", "Error");
+            return;
+        }
+        String plate = String.valueOf(tblVehicles.getValueAt(row, 0));
+        vehicle = manager.findVehicle(plate);
+    }
 
     /**
      * @param args the command line arguments
@@ -308,7 +356,7 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnShow;
     private javax.swing.JButton btnUpdate;
@@ -322,4 +370,5 @@ public class DiaSearchVehicle extends javax.swing.JDialog {
     private javax.swing.JTable tblVehicles;
     private javax.swing.JTextField txtFilter;
     // End of variables declaration//GEN-END:variables
+
 }
