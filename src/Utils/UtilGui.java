@@ -60,8 +60,8 @@ public class UtilGui {
         showMessage(component, message, title, JOptionPane.ERROR_MESSAGE);
     }
     
-    public static void showConfirmMessage(Component component, Object message, String title){
-        JOptionPane.showConfirmDialog(component, message, title, JOptionPane.YES_NO_OPTION);
+    public static int showConfirmMessage(Component component, Object message, String title){
+        return JOptionPane.showConfirmDialog(component, message, title, JOptionPane.YES_NO_OPTION);
     }
     
     public static void filterRows(RowFilter rowFilter, JTextComponent txt, TableRowSorter sorter) {

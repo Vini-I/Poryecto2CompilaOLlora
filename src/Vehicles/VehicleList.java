@@ -34,11 +34,7 @@ public class VehicleList implements List<Vehicle> {
 
     @Override
     public boolean add(Vehicle t) {
-        if (!map.containsKey(t.getPlate())) {
-            map.put(t.getPlate(), t);
-            return true;
-        }
-        return false;
+            return map.put(t.getPlate(), t) == null;
     }
 
     @Override

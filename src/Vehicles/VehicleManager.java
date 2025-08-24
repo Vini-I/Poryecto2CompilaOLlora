@@ -4,7 +4,9 @@
  */
 package Vehicles;
 
+import Exceptions.DuplicatedPlateException;
 import Exceptions.RentedVehicleException;
+import java.util.HashMap;
 
 /**
  *
@@ -15,8 +17,15 @@ public class VehicleManager {
     
     //Clase para manejar excepciones y validaciones
     private VehicleList vehicles = VehicleList.getInstance();
+
+    public VehicleList getVehicles() {
+        return vehicles;
+    }
     
-     public boolean addVehicle(Vehicle vehicle) {
+     public boolean addVehicle(Vehicle vehicle) throws DuplicatedPlateException {
+         if (!vehicles.add(vehicle)){
+             throw new DuplicatedPlateException();
+         }
         return vehicles.add(vehicle);
     }
 
@@ -42,5 +51,8 @@ public class VehicleManager {
         vehicle.setState(updatedVehicle.getState());
         return true;
     }
-    
+   
+    public HashMap<String, Vehicle> getVehicleMap() {
+        return vehicles.getMap();
+    }
 }
