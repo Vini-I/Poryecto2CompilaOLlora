@@ -4,6 +4,10 @@
  */
 package Employees;
 
+import Exceptions.InvalidAgeException;
+import Exceptions.InvalidIdException;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Exceptions.InvalidSalaryException;
 import Persons.Person;
 import java.time.LocalDate;
@@ -13,10 +17,10 @@ import java.time.LocalDate;
  * @author llean
  */
 public class Employee extends Person {
-    private String position;
+    private EmployeePosition position;
     private Double salary;
 
-    public String getPosition() {
+    public EmployeePosition getPosition() {
         return position;
     }
 
@@ -24,15 +28,18 @@ public class Employee extends Person {
         return salary;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(EmployeePosition position) {
         this.position = position;
     }
-
-    public void setSalary(Double salary) {
+    
+public void setSalary(Double salary) throws InvalidSalaryException {
+        if (!validateSalary(salary)){
+            throw new InvalidSalaryException();
+        }
         this.salary = salary;
     }
 
-    public Employee(String id, String name, LocalDate birthday, String phone, String mail,String position, Double salary) throws InvalidSalaryException {
+    public Employee(String id, String name, LocalDate birthday, String phone, String mail,EmployeePosition position, Double salary) throws InvalidSalaryException, InvalidIdException, InvalidAgeException, InvalidPhoneException, InvalidMailException {
         if (!validateSalary(salary)) {
             throw new InvalidSalaryException();
         }

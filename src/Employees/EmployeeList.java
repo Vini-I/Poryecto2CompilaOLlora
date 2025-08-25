@@ -5,7 +5,11 @@
 package Employees;
 
 import static Employees.Employee.validateSalary;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
+import Exceptions.InvalidSalaryException;
 import Lists.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +33,7 @@ public class EmployeeList implements List<Employee> {
     }
 
     private EmployeeList() {
-        this.list = list;
+        this.list = new ArrayList();
     }
     
     @Override
@@ -37,10 +41,16 @@ public class EmployeeList implements List<Employee> {
         return list.add(t);
     }
     
-    public boolean updateEmployee(String id, String position,Double salary) {
+    public boolean updateEmployee(String id, String phone, String mail,EmployeePosition position, Double salary) throws InvalidPhoneException, InvalidMailException, InvalidSalaryException {
         Employee e = find(id);
         if (e != null) {
-            if(position != null && !position.isEmpty()) {
+            if(phone != null && !phone.isEmpty()) {
+                e.setPhone(phone);
+            }
+            if(mail != null && !mail.isEmpty()) {
+                e.setMail(mail);
+            }
+            if(position != null) {
                 e.setPosition(position);
             }
             if(salary != null && validateSalary(salary)) {
