@@ -1,6 +1,8 @@
 
 package Clients;
 import Exceptions.ActiveReservationException;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Exceptions.RegisterClientsException;
 import java.util.ArrayList;
 
@@ -32,9 +34,10 @@ private ClientList clients = ClientList.getInstance();
     //}
     
 
-    public boolean updateClient(Client client) {
+    public boolean updateClient(Client client) throws InvalidMailException, InvalidPhoneException {
         Client cliens = clients.find(client.getId());
-         if (cliens == null) {
+        
+        if (cliens == null) {
         return false; 
         }
          

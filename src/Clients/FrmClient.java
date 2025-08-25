@@ -1,5 +1,9 @@
 package Clients;
 
+import Exceptions.InvalidAgeException;
+import Exceptions.InvalidIdException;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Exceptions.RegisterClientsException;
 import GuiList.Clearable;
 import GuiList.Requireable;
@@ -9,22 +13,20 @@ import GuiList.Showable;
 import Utils.UtilDate;
 import static Utils.UtilDate.calculateAge;
 import Utils.UtilGui;
-import java.awt.HeadlessException;
 import java.time.LocalDate;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 
 
-public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, Saveable, Searchable, Clearable, Showable {
+public class FrmClient extends javax.swing.JFrame implements Requireable, Saveable, Searchable, Clearable, Showable {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmClientPrueba.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmClient.class.getName());
     private ClientManager Manager;
     private Client client;
   
     
     
     
-    public FrmClientPrueba() {
+    public FrmClient() {
         initComponents();
         Manager = new ClientManager();
         showLicenseType();
@@ -58,33 +60,34 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
 
     @Override
     public void save() {
-        try {
-            if (!validateRequiere()) {
-               UtilGui.showErrorMessage(this, "Faltan datos requeridos", "Error");
-                return;
-            }
+        if (validateRequiere()) {
 
-            String id = txtId.getText();
-            String name = txtNombre.getText();
-            LocalDate birthday = UtilDate.toLocalDate(txtfFecha.getText());
-            int years = calculateAge(birthday);
-            String phone = txtTelefono.getText();
-            String mail = txtCorreo.getText();
-            LicenseType licenseType = (LicenseType) CbTipoLicencia.getSelectedItem();
-            String numberLicense = txtnumberLicencia.getText();
+            try {
+                String id = txtId.getText();
+                String name = txtNombre.getText();
+                LocalDate birthday = UtilDate.toLocalDate(txtfFecha.getText());
+                int years = calculateAge(birthday);
+                String phone = txtTelefono.getText();
+                String mail = txtCorreo.getText();
+                LicenseType licenseType = (LicenseType) CbTipoLicencia.getSelectedItem();
+                String numberLicense = txtnumberLicencia.getText();
 
-            client = new Client(id, name, birthday, years, phone, mail, licenseType, numberLicense);
+                client = new Client(id, name, birthday, phone, mail, licenseType, numberLicense);
 
-            if (Manager.addClient(client)) {
-
+                Manager.addClient(client);
+                
                 UtilGui.showMessage(this, "El cliente " + client.getName() + " fue registrado correctamente", "Éxito");
+                 showLicenseType();
                 clear();
-            } else {
-                JOptionPane.showMessageDialog(this, "El cliente no fue registrado", "Error", JOptionPane.ERROR_MESSAGE);
-            }
 
-        } catch (RegisterClientsException | HeadlessException e) {
-            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                UtilGui.showErrorMessage(this, "El cliente " + client.getName() + " no fue registrado", "Error");
+
+            } catch (InvalidIdException | InvalidAgeException | InvalidPhoneException | InvalidMailException | RegisterClientsException ex) {
+                System.getLogger(FrmClient.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+
+            }
+        } else {
+            UtilGui.showErrorMessage(this, "Faltan datos requeridos", "Error");
 
         }
     }
@@ -92,13 +95,13 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
 
     @Override
     public void search() {
-      //\\DgClientsSearch Dg = new DgClientsSearch(this, true);
-      //  Dg.setLists(Manager);
-      //  Dg.setVisible(true);
-      //  client = Dg.g
-      //  if (client != null) {
-      //      showData();
-      //  }
+      DgClientsSearch Dg = new DgClientsSearch(this, true);
+      Dg.setManager(Manager);
+      Dg.setVisible(true);
+      client = Dg.getClient();
+      if (client != null) {
+      showData();
+      }
     }
 
     @Override
@@ -141,27 +144,24 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
         txtnumberLicencia = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         LbEdad = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iimg/borrar2.png"))); // NOI18N
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarActionPerformed(evt);
             }
         });
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iimg/agregar-usuario2.png"))); // NOI18N
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iimg/buscar2.png"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -235,8 +235,6 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Gestión de Clientes");
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iimg/Manos_Estrechadas - copiadd.png"))); // NOI18N
-
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Sus datos son resguardados de manera responsable. Su uso sólo es con fines informativos.");
@@ -250,26 +248,19 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
+                        .addGap(95, 95, 95))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79)))
-                .addComponent(jLabel10)
-                .addGap(55, 55, 55))
+                        .addGap(173, 173, 173))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(15, Short.MAX_VALUE))))
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         LbEdad.setText("Edad");
@@ -278,14 +269,20 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 21, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnBuscar)
+                .addGap(18, 18, 18)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
+                .addComponent(btnUpdate)
+                .addGap(55, 55, 55))
             .addGroup(layout.createSequentialGroup()
                 .addGap(94, 94, 94)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,10 +314,6 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
                     .addComponent(jLabel4)
                     .addComponent(LbEdad))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,10 +349,11 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
                     .addComponent(LbEdad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtTelefono))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addGap(29, 29, 29))
         );
 
@@ -424,7 +418,7 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmClientPrueba().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmClient().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -434,8 +428,8 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -453,9 +447,6 @@ public class FrmClientPrueba extends javax.swing.JFrame implements Requireable, 
     private javax.swing.JTextField txtnumberLicencia;
     // End of variables declaration//GEN-END:variables
 
-    private DgClientsSearch DgClientsSearch(FrmClientPrueba aThis, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+   
    
 }
