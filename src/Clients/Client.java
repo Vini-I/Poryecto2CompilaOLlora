@@ -1,6 +1,7 @@
 
 package Clients;
 
+
 import Persons.Person;
 import java.time.LocalDate;
 
@@ -30,10 +31,19 @@ public class Client extends Person {
        return numberLicense.matches("^(DM|CI)-[1-7]0\\d{3}0\\d{3}$");    
     }
 
-    public Client(LicenseType licenseType, String numberLicense, String id, String name, LocalDate birthday, String phone, String mail) {
+    public Client(String id, String name, LocalDate birthday, String phone, String mail, LicenseType licenseType, String numberLicense) {
         super(id, name, birthday, phone, mail);
-        this.licenseType = licenseType.B1;
+        this.licenseType = licenseType;
         if(validateNumberLicense(numberLicense))
             this.numberLicense = numberLicense;
     }
+
+   
+
+    @Override
+    public String toString() {
+        return "Client{" + "licenseType=" + licenseType + ", numberLicense=" + numberLicense + '}';
+    }
+    
+        
 }

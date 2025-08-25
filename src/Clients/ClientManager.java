@@ -1,19 +1,23 @@
 
 package Clients;
-
 import Exceptions.ActiveReservationException;
 import Exceptions.RegisterClientsException;
+import java.util.ArrayList;
 
 
 public class ClientManager {
     
-ClientList clients = ClientList.getInstance();
+private ClientList clients = ClientList.getInstance();
+
+    public ClientList getClients() {
+        return clients;
+    }
 
     public boolean addClient(Client client) throws RegisterClientsException {
         if (client.getNumberLicense() == null){
             throw new RegisterClientsException();
         }
-        return clients.addClient(client);
+        return clients.add(client);
     }
 
     public Client findClient(String Id) {
@@ -21,7 +25,12 @@ ClientList clients = ClientList.getInstance();
     }
 
     //public boolean removeClient(Client client) throws ActiveReservationException {
+   //     if (client == ) {
+    //        throw new ActiveReservationException();
+      //  }
+      //  return client.remove(client);
     //}
+    
 
     public boolean updateClient(Client client) {
         Client cliens = clients.find(client.getId());
