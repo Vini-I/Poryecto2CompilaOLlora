@@ -2,6 +2,11 @@
 package Clients;
 
 
+
+import Exceptions.InvalidAgeException;
+import Exceptions.InvalidIdException;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Persons.Person;
 import java.time.LocalDate;
 
@@ -31,14 +36,12 @@ public class Client extends Person {
        return numberLicense.matches("^(DM|CI)-[1-7]0\\d{3}0\\d{3}$");    
     }
 
-    public Client(String id, String name, LocalDate birthday, String phone, String mail, LicenseType licenseType, String numberLicense) {
+    public Client(String id, String name, LocalDate birthday, String phone, String mail, LicenseType licenseType, String numberLicense) throws InvalidIdException, InvalidAgeException, InvalidPhoneException, InvalidMailException {
         super(id, name, birthday, phone, mail);
-        this.licenseType = licenseType;
+         this.licenseType = licenseType;
         if(validateNumberLicense(numberLicense))
             this.numberLicense = numberLicense;
     }
-
-   
 
     @Override
     public String toString() {

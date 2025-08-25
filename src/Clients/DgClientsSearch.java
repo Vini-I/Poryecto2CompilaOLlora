@@ -20,6 +20,10 @@ import javax.swing.table.TableRowSorter;
 public class DgClientsSearch extends javax.swing.JDialog implements Deletable, Updatable {
     
     private ClientManager Manager;
+
+    public Client getClient() {
+        return client;
+    }
     private Client client;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DgClientsSearch.class.getName());
 
@@ -39,13 +43,17 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
         tblClientes.setRowSorter(sorter);
         
     }
+
+    public void setManager(ClientManager Manager) {
+        this.Manager = Manager;
+    }
       private void loadTable(){
-      ArrayList <Client> Array = Manager.getClientsList();
-        model.setRowCount(0);
-        for (Client client : Array.) {
-            Object[] data = {client.getId(), client.getName(), client.getMail(), UtilDate.toString(client.getBirthDate()), client.getLicenseType(),       client.getName(), client.getMail(), client.getLicenseType(), client.getNumberLicense(),client.getPhone(), client.getYears()};
-            model.addRow(data);
-        }
+     // ArrayList <Client> Array = Manager.getClientsList();
+        //model.setRowCount(0);
+        //for (Client client : Array.) {
+           // Object[] data = {client.getId(), client.getName(), client.getMail(), UtilDate.toString(client.getBirthDate()), client.getLicenseType(),       client.getName(), client.getMail(), client.getLicenseType(), client.getNumberLicense(),client.getPhone(), client.getYears()};
+            //model.addRow(data);
+        //}
     }
 
     /**
@@ -61,7 +69,6 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
         tblClientes = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -85,8 +92,6 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Gestión de Clientes");
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iimg/Manos_Estrechadas - copiadd.png"))); // NOI18N
-
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Sus datos son resguardados de manera responsable. Su uso sólo es con fines informativos.");
@@ -100,26 +105,19 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
+                        .addGap(95, 95, 95))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(87, 87, 87)))
-                .addComponent(jLabel10)
-                .addGap(55, 55, 55))
+                        .addGap(142, 142, 142))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(15, Short.MAX_VALUE))))
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,7 +182,6 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
