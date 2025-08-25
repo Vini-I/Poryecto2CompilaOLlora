@@ -1,19 +1,22 @@
 
 package Persons;
 
-import Exceptions.InvalidAgeExcepcion;
+import Exceptions.InvalidAgeException;
+import Exceptions.InvalidIdException;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Utils.UtilDate;
 import java.time.LocalDate;
 
 
-public abstract class  Person {
+public abstract class Person {
     
     public String id;
     public String name; 
     public LocalDate birthday;
     public String phone;
     public String mail;
-    public  int years;
+    public int years;
 
     public String getId() {
         return id;
@@ -39,12 +42,17 @@ public abstract class  Person {
         return years;
     }
 
-
-    public void setPhone(String phone) {
+    public void setPhone(String phone) throws InvalidPhoneException {
+        if (!validatePhone(phone)) {
+            throw new InvalidPhoneException();
+        }
         this.phone = phone;
     }
 
-    public void setMail(String mail) {
+    public void setMail(String mail) throws InvalidMailException {
+        if (!validateMail(mail)){
+             throw new InvalidMailException();
+        }
         this.mail = mail;
     }
 
@@ -59,28 +67,33 @@ public abstract class  Person {
     private static boolean validateMail(String mail){
         return mail.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");  
     }
-        
     
+    public Person(String id, String name, LocalDate birthday, String phone, String mail) throws InvalidIdException, InvalidAgeException , InvalidPhoneException, InvalidMailException{
+        if (!validateId(id)) {
+            throw new InvalidIdException();
+        }
+        if (!UtilDate.isNotFutureDate(birthday) || !UtilDate.isLegalAge(birthday)) {
+            throw new InvalidAgeException();
+        }
+        if (!validatePhone(phone)) {
+            throw new InvalidPhoneException();
+        }
 
-    
-    public Person(String id, String name, LocalDate birthday, String phone, String mail) {
-        if(validateId(id))
-        throw new IllegalArgumentException("Invalid ID: " + id);
-            this.id = id;
-        if( name != null && !name.trim().isEmpty())  
-            this.name = name;
-        if(UtilDate.isNotFutureDate(birthday) && UtilDate.isLegalAge(birthday))
-            this.birthday = birthday;
-        this.years =UtilDate.calculateAge(birthday);
-        if(validatePhone(phone))
-            this.phone = phone;
-        if(validateMail(mail))
-        this.mail = mail;   
+        if (!validateMail(mail)) {
+            throw new InvalidMailException();
+        }
+        this.id = id;
+        this.name = name;
+        this.birthday = birthday;
+        this.phone = phone;
+        this.mail = mail;
+        this.years = UtilDate.calculateAge(birthday);
     }
 
+    // probar funcionalidad en consola
     @Override
     public String toString() {
-        return "id=" + id + ", name=" + name + ", birthday=" + birthday + ", phone=" + phone + ", mail=" + mail + ", years=" + years + '}';
+        return "id " + id + " name " + name + " birthday " + birthday + " phone " + phone + " mail " + mail + " years " + years;
     }
     
     

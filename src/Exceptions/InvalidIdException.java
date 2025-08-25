@@ -6,12 +6,12 @@ package Exceptions;
 
 /**
  *
- * @author Juan Pablo Rodriguez
+ * @author rodol
  */
-public class InvalidAgeExcepcion extends Exception {
+public class InvalidIdException extends Exception {
 
-    public InvalidAgeExcepcion() {
-        super("La edad no puede ser menor a los 18 años");
+    public InvalidIdException() {
+        super("Formato de cedula no valido. Intente agregar los ceros si no lo esta haciendo");
     }
     
 }
