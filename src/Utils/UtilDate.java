@@ -1,7 +1,9 @@
 
 package Utils;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
@@ -30,6 +32,18 @@ public abstract class UtilDate {
 
     public static boolean isNotOlderThan20(LocalDate date) {
         return calculateAge(date)  <= 20;
+    }
+    
+    public static boolean isNotPastDateTime(LocalDateTime date) {
+        return !date.isBefore(LocalDateTime.now());
+    }
+
+    public static boolean periodIsValid(LocalDateTime date1, LocalDateTime date2) {
+        return Duration.between(date1, date2).toDays() >= 1 && Duration.between(date1, date2).toDays() <=30;
+    }
+    
+    public static boolean isNotFutureDateTime(LocalDateTime date1, LocalDateTime date2) {
+        return Duration.between(date1, date2).toNanos() >=1;
     }
 
 }
