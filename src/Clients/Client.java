@@ -2,6 +2,12 @@
 package Clients;
 
 
+
+import Exceptions.InvalidAgeException;
+import Exceptions.InvalidIdException;
+import Exceptions.InvalidLicenseExcepcion;
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
 import Persons.Person;
 import java.time.LocalDate;
 
@@ -23,7 +29,10 @@ public class Client extends Person {
         this.licenseType = licenseType;
     }
 
-    public void setNumberLicense(String numberLicense) {
+    public void setNumberLicense(String numberLicense) throws InvalidLicenseExcepcion {
+        if(!validateNumberLicense(numberLicense)) {
+            throw new InvalidLicenseExcepcion();
+        }
         this.numberLicense = numberLicense;
     }
     
@@ -31,19 +40,20 @@ public class Client extends Person {
        return numberLicense.matches("^(DM|CI)-[1-7]0\\d{3}0\\d{3}$");    
     }
 
-    public Client(String id, String name, LocalDate birthday, String phone, String mail, LicenseType licenseType, String numberLicense) {
+    public Client(String id, String name, LocalDate birthday, String phone, String mail, LicenseType licenseType, String numberLicense) throws InvalidIdException, InvalidAgeException, InvalidPhoneException, InvalidMailException, InvalidLicenseExcepcion {
         super(id, name, birthday, phone, mail);
         this.licenseType = licenseType;
-        if(validateNumberLicense(numberLicense))
-            this.numberLicense = numberLicense;
+        if (!validateNumberLicense(numberLicense)){
+            throw new InvalidLicenseExcepcion();
+        }
+        this.numberLicense = numberLicense;
     }
-
-   
 
     @Override
     public String toString() {
-        return "Client{" + "licenseType=" + licenseType + ", numberLicense=" + numberLicense + '}';
+        return "Client{" + "id= " +id +"name+ "+ name +"birthday= " +birthday +"years= "+ getYears()+ "phone= "+ phone + "mail= "+mail +"licenseType= "+ licenseType  +"numberLicense ="+ numberLicense + '}';
     }
-    
+
+   
         
 }

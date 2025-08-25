@@ -10,22 +10,29 @@ public class ClientList implements List<Client> {
     
     ArrayList <Client> Array;
     private static ClientList instance;
-   
+    
+    
+    //instan
     public static ClientList getInstance() {
         if (instance == null) {
             instance = new ClientList();
         }
         return instance;
     }
-
+    
+    
+    //metodo get
     public ArrayList<Client> getArray() {
         return Array;
     }
 
+    //Contruc
     public ClientList() {
         this.Array = new ArrayList<>();
     }
     
+    
+    //metodos 
     @Override
     public boolean add(Client t) {
        for (Client a : Array) {
