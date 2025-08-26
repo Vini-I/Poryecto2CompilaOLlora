@@ -6,6 +6,7 @@ package Employees;
 
 import GuiList.Deletable;
 import GuiList.Showable;
+import GuiList.Updatable;
 import Utils.UtilDate;
 import Utils.UtilGui;
 import Vehicles.Vehicle;
@@ -21,7 +22,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author llean
  */
-public class FrmEmployee extends javax.swing.JFrame implements Deletable,Showable{
+public class FrmEmployee extends javax.swing.JFrame implements Deletable,Updatable{
 
     private EmployeeList list;
     private Employee employee;
@@ -95,9 +96,16 @@ public class FrmEmployee extends javax.swing.JFrame implements Deletable,Showabl
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tblEmployee.getTableHeader().setReorderingAllowed(false);
@@ -170,9 +178,7 @@ public class FrmEmployee extends javax.swing.JFrame implements Deletable,Showabl
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyActionPerformed
-    FrmModifyEmployee frmModifyEmployee = new FrmModifyEmployee();
-    frmModifyEmployee.setVisible(true);
-    this.dispose();
+        update();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnModifyActionPerformed
 
@@ -242,17 +248,22 @@ public class FrmEmployee extends javax.swing.JFrame implements Deletable,Showabl
         if (employee != null) {
                 int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas eliminar a este empleado?", "Confirmar Eliminacion");
                 if (decision == JOptionPane.YES_OPTION) {
-                    boolean eliminado = list.remove(employee);
-                    if (eliminado) {
-                        System.out.println("eliminado");
-                    }
+                    System.out.println(employee.toString());
+                    list.remove(employee);
                     loadTable();
                 }
             }
         }
 
     @Override
-    public void showData() {
-        //al seleccionar un indice e irnos a modificar el traspaso de informacion se programa aqui
+    public void update() {
+    int row = tblEmployee.getSelectedRow();
+    selectedEmployee(row);
+        if (employee != null) {
+        FrmModifyEmployee frmModifyEmployee = new FrmModifyEmployee(employee,list);
+        frmModifyEmployee.setVisible(true);
+        this.dispose();
+        loadTable();
+        }
     }
 }
