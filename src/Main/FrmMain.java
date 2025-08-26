@@ -6,6 +6,7 @@ package Main;
 
 import Utils.UtilGui;
 import Vehicles.FrmVehicle;
+import Employees.FrmEmployee;
 import java.awt.Desktop;
 import java.net.URI;
 import javax.swing.JFrame;
@@ -101,6 +102,11 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnEmployee.setBackground(new java.awt.Color(255, 255, 255));
         btnEmployee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/gestionEmpleadoIcon.png"))); // NOI18N
+        btnEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmployeeActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(btnEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 40, 120, 60));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -119,6 +125,8 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnContract.setBackground(new java.awt.Color(255, 255, 255));
         btnContract.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/gestionContratoIcon.png"))); // NOI18N
+        btnContract.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnContract.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jLayeredPane1.add(btnContract, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 40, 120, 60));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -230,15 +238,11 @@ public class FrmMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1828, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 92, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1570, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -257,7 +261,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVehicleActionPerformed
 
     private void btnMoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoreActionPerformed
-       String url = "www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
+        String url = "www.youtube.com/watch?v=xvFZjo5PgG0&autoplay=1";
         try {
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(new URI(url));
@@ -269,6 +273,11 @@ public class FrmMain extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al intentar abrir el enlace.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnMoreActionPerformed
+
+    private void btnEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeeActionPerformed
+        FrmEmployee frmEmployee = new FrmEmployee();
+        frmEmployee.setVisible(true);
+    }//GEN-LAST:event_btnEmployeeActionPerformed
 
     /**
      * @param args the command line arguments
