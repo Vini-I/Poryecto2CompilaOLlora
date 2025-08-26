@@ -44,18 +44,10 @@ public class EmployeeList implements List<Employee> {
     public boolean updateEmployee(String id, String phone, String mail,EmployeePosition position, Double salary) throws InvalidPhoneException, InvalidMailException, InvalidSalaryException {
         Employee e = find(id);
         if (e != null) {
-            if(phone != null && !phone.isEmpty()) {
                 e.setPhone(phone);
-            }
-            if(mail != null && !mail.isEmpty()) {
                 e.setMail(mail);
-            }
-            if(position != null) {
                 e.setPosition(position);
-            }
-            if(salary != null && validateSalary(salary)) {
                 e.setSalary(salary);
-            }
             return true;
         }
         return false;
@@ -73,11 +65,6 @@ public class EmployeeList implements List<Employee> {
 
     @Override
     public boolean remove(Employee t) {
-        Employee e = find(t);
-        if(e != null) {
-            list.remove(e);
-            return true;
-        }
-        return false;
+           return list.remove(t);
     }
 }

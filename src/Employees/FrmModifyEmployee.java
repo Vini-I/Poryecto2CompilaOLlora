@@ -4,24 +4,34 @@
  */
 package Employees;
 
+import Exceptions.InvalidMailException;
+import Exceptions.InvalidPhoneException;
+import Exceptions.InvalidSalaryException;
 import GuiList.Requireable;
+import GuiList.Showable;
 import GuiList.Updatable;
-import Vehicles.VehicleType;
+import Utils.UtilDate;
+import Utils.UtilGui;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author llean
  */
-public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,Requireable {
-
+public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,Requireable,Showable {
+    private static Employee employee;
+    private static EmployeeList list;
     /**
      * Creates new form FrmModifyEmployee
      */
-    public FrmModifyEmployee() {
+    public FrmModifyEmployee(Employee employee,EmployeeList list) {
+        this.employee = employee;
+        this.list = list;
         initComponents();
         showPosition();
-        cmbPosition.setSelectedIndex(-1);
+        showData();
     }
 
     /**
@@ -36,21 +46,21 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnModify = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        txtBirthdate = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnGoBack = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtMail = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtSalary = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         cmbPosition = new javax.swing.JComboBox<>();
+        txtPhone = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -67,8 +77,8 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
         });
         getContentPane().add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(41, 252, -1, -1));
 
-        jTextField3.setEditable(false);
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 206, 100, -1));
+        txtBirthdate.setEditable(false);
+        getContentPane().add(txtBirthdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 206, 100, -1));
 
         jLabel5.setText("Telefono");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(182, 78, -1, -1));
@@ -80,18 +90,17 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
             }
         });
         getContentPane().add(btnGoBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 252, -1, -1));
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 100, -1));
 
         jLabel6.setText("Correo");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
-        getContentPane().add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 100, -1));
+        getContentPane().add(txtMail, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 100, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setText("Modificar Empleado");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 22, -1, 50));
 
-        jTextField1.setEditable(false);
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 99, 100, -1));
+        txtId.setEditable(false);
+        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 99, 100, -1));
 
         jLabel7.setText("Puesto");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, -1, -1));
@@ -101,10 +110,10 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
 
         jLabel3.setText("Nombre");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 128, -1, -1));
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 100, -1));
+        getContentPane().add(txtSalary, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 100, -1));
 
-        jTextField2.setEditable(false);
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 151, 100, -1));
+        txtName.setEditable(false);
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 151, 100, -1));
 
         jLabel9.setText("ID");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 77, -1, -1));
@@ -112,6 +121,13 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
         cmbPosition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbPosition.setSelectedIndex(-1);
         getContentPane().add(cmbPosition, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 100, -1));
+
+        try {
+            txtPhone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        getContentPane().add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 100, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -159,7 +175,7 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmModifyEmployee().setVisible(true);
+                new FrmModifyEmployee(employee, list).setVisible(true);
             }
         });
     }
@@ -185,21 +201,47 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField txtBirthdate;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtMail;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JFormattedTextField txtPhone;
+    private javax.swing.JTextField txtSalary;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void update() {
-        
+        if(validateRequiere()) {
+        String phone = txtPhone.getText();
+        String mail =txtMail.getText();
+        EmployeePosition position = (EmployeePosition) cmbPosition.getSelectedItem();
+        Double salary = Double.valueOf(txtSalary.getText());
+        try {
+            list.updateEmployee(employee.getId(), phone, mail, position, salary);
+            FrmEmployee frmEmployee = new FrmEmployee();
+            frmEmployee.setVisible(true);
+            this.dispose();
+        } catch (InvalidPhoneException | InvalidMailException | InvalidSalaryException e) {
+            UtilGui.showErrorMessage(this, e.getMessage(), "error");
+        }
+        }else{
+            UtilGui.showErrorMessage(this, "faltan datos requeridos", "error");
+        }
     }
 
     @Override
     public boolean validateRequiere() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return UtilGui.validateRequiere(txtPhone,txtMail,txtSalary);
+    }
+
+    @Override
+    public void showData() {
+        txtId.setText(employee.getId());
+        txtName.setText(employee.getName());
+        txtBirthdate.setText(UtilDate.toString(employee.getBirthday()));
+        txtPhone.setText(employee.getPhone());
+        txtMail.setText(employee.getMail());
+        txtSalary.setText(Double.toString(employee.getSalary()));
+        cmbPosition.setSelectedItem(employee.getPosition());
     }
 }
