@@ -133,7 +133,7 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
 
         txtYear.setBackground(new java.awt.Color(255, 255, 255));
         txtYear.setForeground(new java.awt.Color(0, 0, 0));
-        txtYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
+        txtYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("####"))));
         txtYear.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jPanel1.add(txtYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, 260, 68));
 
@@ -246,7 +246,7 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
                 String plate = txtPlate.getText();
                 String brand = txtBrand.getText();
                 String model = txtModel.getText();
-                LocalDate year = UtilDate.toLocalDate(txtYear.getText());
+                int year = Integer.parseInt(txtYear.getText());
                 VehicleType type = (VehicleType) txtType.getSelectedItem();
 
                 vehicle = new Vehicle(plate, brand, model, year, type);
@@ -272,6 +272,8 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
         vehicle = frmSearch.getVehicle();
         if (vehicle != null) {
             showData();
+        }else{
+            vehicle = null;
         }
     }
 
@@ -281,7 +283,7 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
         txtBrand.setText(vehicle.getBrand());
         txtModel.setText(vehicle.getModel());
         txtType.setSelectedItem(vehicle.getType());
-        txtYear.setText(UtilDate.toString(vehicle.getYear()));
+        txtYear.setText(String.valueOf(vehicle.getYear()));
     
     }
 

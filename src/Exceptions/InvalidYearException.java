@@ -11,7 +11,7 @@ package Exceptions;
 public class InvalidYearException extends Exception{
 
     public InvalidYearException() {
-        super("La fecha ingresada no es valida");
+        super("El vehiculo no puede tener mas de 20 anhos de antiguedad o tener una fecha futura");
     }
     
     

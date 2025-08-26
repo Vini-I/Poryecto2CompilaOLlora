@@ -6,7 +6,6 @@ package Vehicles;
 import Exceptions.InvalidPlateException;
 import Exceptions.InvalidYearException;
 import Utils.UtilDate;
-import java.time.LocalDate;
 
 /**
  *
@@ -16,7 +15,7 @@ public class Vehicle {
     private String plate;
     private String brand;
     private String model;
-    private LocalDate year;
+    private int year;
     private VehicleType type;
     private VehicleState state;
 
@@ -32,7 +31,7 @@ public class Vehicle {
         return brand;
     }
 
-    public LocalDate getYear() {
+    public int getYear() {
         return year;
     }
 
@@ -55,12 +54,12 @@ public class Vehicle {
     public void setState(VehicleState state) {
         this.state = state;
     }
-
-    public Vehicle(String plate, String brand, String model, LocalDate year, VehicleType type) throws InvalidPlateException, InvalidYearException {
+    
+    public Vehicle(String plate, String brand, String model, int year, VehicleType type) throws InvalidPlateException, InvalidYearException {
         if(!plate.matches("^[A-Z]{3}-[1-9]{3}$")){
             throw new InvalidPlateException();
         }
-        if(!UtilDate.isNotFutureDate(year) || !UtilDate.isNotOlderThan20(year)){
+        if (!UtilDate.validateYear(year)){
             throw new InvalidYearException();
         }
         this.plate = plate;
