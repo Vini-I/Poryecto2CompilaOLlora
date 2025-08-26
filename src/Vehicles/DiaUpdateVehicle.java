@@ -220,11 +220,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
     }//GEN-LAST:event_txtTypeActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-       if (validateRequiere()) {
-            update();
-        } else {
-            UtilGui.showErrorMessage(this, "El campo de modelo no puede estar vacío", "Error");
-        }
+       update();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -249,28 +245,31 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
 
     @Override
     public void update() {
-        String newModel = txtModel.getText();
-        VehicleType newType = (VehicleType) txtType.getSelectedItem();
-        VehicleState newState = null;
+        if (validateRequiere()) {
+            String newModel = txtModel.getText();
+            VehicleType newType = (VehicleType) txtType.getSelectedItem();
+            VehicleState newState = null;
 
-        if (rbAvailable.isSelected()) {
-            newState = VehicleState.AVAILABLE;
-        } else if (rbRented.isSelected()) {
-            newState = VehicleState.RENTED;
-        } else if (rbMaintenance.isSelected()) {
-            newState = VehicleState.INMAINTENANCE;
-        }
-
-        try {
-            Vehicle updatedVehicle = new Vehicle(vehicle.getPlate(), vehicle.getBrand(), newModel, vehicle.getYear(), newType);
-            updatedVehicle.setState(newState);
-
-            if (!manager.updateVehicle(updatedVehicle)) {
-                UtilGui.showErrorMessage(this, "Error al actualizar el vehículo.", "Error");
+            if (rbAvailable.isSelected()) {
+                newState = VehicleState.AVAILABLE;
+            } else if (rbRented.isSelected()) {
+                newState = VehicleState.RENTED;
+            } else if (rbMaintenance.isSelected()) {
+                newState = VehicleState.INMAINTENANCE;
             }
-            this.dispose();
-        } catch (InvalidPlateException | InvalidYearException e) {
-            UtilGui.showErrorMessage(this, "Error al obtener el vehiculo: " + e.getMessage(), "Error");
+
+            try {
+                Vehicle updatedVehicle = new Vehicle(vehicle.getPlate(), vehicle.getBrand(), newModel, vehicle.getYear(), newType);
+                updatedVehicle.setState(newState);
+
+                manager.updateVehicle(updatedVehicle);
+
+                this.dispose();
+            } catch (InvalidPlateException | InvalidYearException e) {
+                UtilGui.showErrorMessage(this, "Error al obtener el vehiculo: " + e.getMessage(), "Error");
+            }
+        } else {
+            UtilGui.showErrorMessage(this, "Faltan datos requeridos", "Error");
         }
     }
 
@@ -280,11 +279,19 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
             UtilGui.showErrorMessage(this, "Debe especificar el vehículo a actualizar", "Error");
             return;
         }
+        
+        if (vehicle.getState() == VehicleState.AVAILABLE) {
+            rbAvailable.setSelected(true);
+        } else if (vehicle.getState() == VehicleState.RENTED) {
+            rbRented.setSelected(true);
+        } else if (vehicle.getState() == VehicleState.INMAINTENANCE) {
+            rbMaintenance.setSelected(true);
+        }
 
         txtPlate.setText(vehicle.getPlate());
         txtBrand.setText(vehicle.getBrand());
         txtModel.setText(vehicle.getModel());
-        txtYear.setText(UtilDate.toString(vehicle.getYear()));
+        txtYear.setText(String.valueOf(vehicle.getYear()));
         txtType.setSelectedItem(vehicle.getType());
     }
     /**

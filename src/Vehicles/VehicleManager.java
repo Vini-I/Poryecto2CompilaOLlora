@@ -23,7 +23,7 @@ public class VehicleManager {
     }
     
      public boolean addVehicle(Vehicle vehicle) throws DuplicatedPlateException {
-         if (!vehicles.add(vehicle)){
+         if (vehicles.getMap().containsKey(vehicle.getPlate())){
              throw new DuplicatedPlateException();
          }
         return vehicles.add(vehicle);

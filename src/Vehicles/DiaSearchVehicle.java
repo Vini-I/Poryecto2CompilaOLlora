@@ -5,7 +5,6 @@
 package Vehicles;
 
 import Exceptions.RentedVehicleException;
-import Utils.UtilDate;
 import Utils.UtilGui;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -54,7 +53,7 @@ public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, 
         HashMap<String, Vehicle> map = manager.getVehicleMap();
         model.setRowCount(0);
         for (Vehicle vehicle : map.values()) {
-            Object[] data = {vehicle.getPlate(), vehicle.getBrand(), vehicle.getModel(), UtilDate.toString(vehicle.getYear()), vehicle.getType(), vehicle.getState()};
+            Object[] data = {vehicle.getPlate(), vehicle.getBrand(), vehicle.getModel(), String.valueOf(vehicle.getYear()), vehicle.getType(), vehicle.getState()};
             model.addRow(data);
         }
     }
@@ -355,6 +354,7 @@ public class DiaSearchVehicle extends javax.swing.JDialog implements Deletable, 
     private void selectedVehicle(int row) {
         if (row == -1) {
             UtilGui.showErrorMessage(this, "Debe seleccionar un vehiculo", "Error");
+            vehicle = null;
             return;
         }
         String plate = String.valueOf(tblVehicles.getValueAt(row, 0));
