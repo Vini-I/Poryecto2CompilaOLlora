@@ -53,20 +53,23 @@ public class Reservation {
         this.finishTime = finishTime;
     }
 
-    public Reservation(Client cliente, Vehicle car, LocalDateTime startTime, LocalDateTime finishTime) {
+    public Reservation(Client cliente, Vehicle car, LocalDateTime startTime, LocalDateTime finishTime) throws NoClientException, NoCarSelectedException, InvalidDateException {
+        if (!validateClient(cliente.getId())) throw new NoClientException();
         this.cliente = cliente;
+        if (!validateVehicle(car.getPlate())) throw new NoCarSelectedException();
         this.car = car;
         this.carType = car.getType();
+        if (!validateDates(startTime, finishTime)) throw new InvalidDateException();
         this.startTime = startTime;
         this.finishTime = finishTime;
     }
     
-    public boolean validateClient(String id) {
+    public static boolean validateClient(String id) {
         ClientList cL = ClientList.getInstance();
         return cL.find(id) != null;
     }
     
-    public boolean validateVehicle(String plate) {
+    public static boolean validateVehicle(String plate) {
         VehicleList vL = VehicleList.getInstance();
         return vL.find(plate) != null;
     }
@@ -89,7 +92,7 @@ public class Reservation {
         return false;
     }
     
-    public boolean validateDates(LocalDateTime startTime, LocalDateTime finishTime) {
+    public static boolean validateDates(LocalDateTime startTime, LocalDateTime finishTime) {
         if (UtilDate.isNotFutureDateTime(startTime, LocalDateTime.now())) return false;
         boolean startOk = UtilDate.isNotPastDateTime(startTime);
         boolean periodOk = UtilDate.periodIsValid(startTime, finishTime);

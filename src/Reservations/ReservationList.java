@@ -4,9 +4,12 @@
  */
 package Reservations;
 
+import Clients.Client;
+import Exceptions.*;
 import Lists.List;
 import Utils.UtilDate;
 import Vehicles.Vehicle;
+import Vehicles.VehicleList;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -114,5 +117,101 @@ public class ReservationList implements List<Vehicle> {
     public java.util.List<Reservation> searchByClienteAndRange(String clienteId, LocalDate startDate, LocalDate endDate) {
         return searchReservations(clienteId, startDate, endDate);
     }
+    
+    public boolean isVehicleAvailable(String placa, LocalDateTime start, LocalDateTime end) {
+        Queue<Reservation> cola = map.get(placa);
+
+        if (cola == null || cola.isEmpty()) {
+            return true;
+        }
+
+        for (Reservation r : cola) {
+            LocalDateTime rStart = r.getStartTime();
+            LocalDateTime rEnd   = r.getFinishTime();
+
+            boolean overlap = !rEnd.isBefore(start) && !rStart.isAfter(end);
+            if (overlap) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    public boolean createReservation(Client cliente, Vehicle vehiculo, LocalDateTime start, LocalDateTime finish)
+            throws NoClientException, NoCarSelectedException,  InvalidDateException, OverlappingReservationException {
+        if (!Reservation.validateClient(cliente.getId())) {
+            throw new NoClientException();
+        }
+
+        if (!Reservation.validateVehicle(vehiculo.getPlate())) {
+            throw new NoCarSelectedException();
+        }
+
+        if (!Reservation.validateDates(start, finish)) {
+            throw new InvalidDateException();
+        }
+
+        if (UtilDate.periodIsValid(start, start)) {
+            throw new InvalidDateException();
+        }
+
+        if (!isVehicleAvailable(vehiculo.getPlate(), start, finish)) {
+            throw new OverlappingReservationException();
+        }
+
+        Reservation nueva = new Reservation(cliente, vehiculo, start, finish);
+        map.putIfAbsent(vehiculo.getPlate(), new LinkedList<>());
+        map.get(vehiculo.getPlate()).add(nueva);
+        return true;
+    }
+    
+    public boolean modifyReservationDates(String placa, Reservation reserva, LocalDateTime newStart, LocalDateTime newFinish)
+            throws InvalidDateException, OverlappingReservationException {
+        Queue<Reservation> cola = map.get(placa);
+        if (cola == null || !cola.contains(reserva)) return false;
+
+        if (!reserva.validateDates(newStart, newFinish)) {
+            throw new InvalidDateException();
+        }
+
+        cola.remove(reserva);
+        if (!isVehicleAvailable(placa, newStart, newFinish)) {
+            cola.add(reserva);
+            throw new OverlappingReservationException();
+        }
+
+        reserva.modifyDates(newStart, newFinish);
+        cola.add(reserva);
+        return true;
+    }
+    
+    public boolean modifyReservationVehicle(String oldPlaca, String newPlaca, Reservation reserva)
+            throws NoCarSelectedException, OverlappingReservationException {
+        Queue<Reservation> oldQueue = map.get(oldPlaca);
+        VehicleList vehicleList = VehicleList.getInstance();
+        Vehicle nuevoVehiculo = vehicleList.find(newPlaca);
+
+        if (nuevoVehiculo == null) throw new NoCarSelectedException();
+
+        if (!isVehicleAvailable(newPlaca, reserva.getStartTime(), reserva.getFinishTime())) {
+            throw new OverlappingReservationException();
+        }
+
+        oldQueue.remove(reserva);
+        reserva.modifyCar(nuevoVehiculo);
+        map.putIfAbsent(newPlaca, new LinkedList<>());
+        map.get(newPlaca).add(reserva);
+        return true;
+    }
+    
+    public Reservation confirmReservation(String placa, Reservation reserva) {
+        Queue<Reservation> cola = map.get(placa);
+        if (cola != null && cola.contains(reserva)) {
+            return reserva;
+        }
+        return null;
+    }
+
     
 }
