@@ -30,8 +30,10 @@ public abstract class UtilDate {
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    public static boolean isNotOlderThan20(LocalDate date) {
-        return calculateAge(date)  <= 20;
+    public static boolean validateYear(int year) {
+        int currentYear = LocalDate.now().getYear();
+        int minYear = currentYear - 20;
+        return year >= minYear && year <= currentYear;
     }
     
     public static boolean isNotPastDateTime(LocalDateTime date) {
