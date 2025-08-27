@@ -47,5 +47,9 @@ public abstract class UtilDate {
     public static boolean isNotFutureDateTime(LocalDateTime date1, LocalDateTime date2) {
         return Duration.between(date1, date2).toNanos() >=1;
     }
+    
+    public static int periodDuration(LocalDateTime date1, LocalDateTime date2) {
+        return (int) Duration.between(date1, date2).toDays();
+    }
 
 }
