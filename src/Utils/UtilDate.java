@@ -51,5 +51,8 @@ public abstract class UtilDate {
     public static int periodDuration(LocalDateTime date1, LocalDateTime date2) {
         return (int) Duration.between(date1, date2).toDays();
     }
-
+    
+    public static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        return start1.isBefore(end2) && end1.isAfter(start2);
+    }
 }

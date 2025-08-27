@@ -5,8 +5,11 @@
 package Contracts;
 
 import Clients.Client;
-import Exceptions.ContractAlreadyExistsException;
+import Clients.ClientList;
+import Exceptions.*;
+import Utils.UtilDate;
 import Vehicles.Vehicle;
+import Vehicles.VehicleList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -19,19 +22,108 @@ public class ContractList {
     private HashMap<Client, HashSet<Contract>> listByClient;
     private HashMap<Vehicle, HashSet<Contract>> listByVehicle;
     
-    public void addContract(Contract contrato) throws ContractAlreadyExistsException {
+    public static ContractList getInstance() {
+        if (instance == null) {
+            instance = new ContractList();
+        }
+        return instance;
+    }
+
+    private ContractList() {
+        this.listByClient = new HashMap<>();
+        this.listByVehicle = new HashMap<>();
+    }
+    
+    public void addContract(Contract contrato) 
+            throws ContractAlreadyExistsException, NoClientException, 
+            NoCarSelectedException, InvalidDateException, OverlappingReservationException {
+        validateContract(contrato);
+        
         Client cliente = contrato.getClient();
         Vehicle vehiculo = contrato.getVehicle();
         
         listByClient.putIfAbsent(cliente, new HashSet<Contract>());
         listByVehicle.putIfAbsent(vehiculo, new HashSet<Contract>());
         
-        HashSet<Contract> hashCliente = listByClient.get(cliente);
-        HashSet<Contract> hashCarro = listByVehicle.get(vehiculo);
+        boolean clientAddSuccess = listByClient.get(cliente).add(contrato);
         
-        if (!hashCliente.add(contrato)) throw new ContractAlreadyExistsException();
+        boolean vehicleAddSuccess = listByVehicle.get(vehiculo).add(contrato);
         
-        if (!hashCarro.add(contrato)) throw new ContractAlreadyExistsException();
+        if (!clientAddSuccess || !vehicleAddSuccess) {
+            if (clientAddSuccess) {
+                listByClient.get(cliente).remove(contrato);
+            }
+            if (vehicleAddSuccess) {
+                listByVehicle.get(vehiculo).remove(contrato);
+            }
+            throw new ContractAlreadyExistsException();
+        }
     }
+    
+    public HashSet<Contract> getContractsByClientId(String cedula) {
+        Client cliente = ClientList.getInstance().find(cedula);
+        
+        if (cliente != null) return listByClient.getOrDefault(cliente, new HashSet<>());
+        return new HashSet<>();
+    }
+    
+    public HashSet<Contract> getContractsByVehiclePlate(String vehiclePlate) {
+        Vehicle vehicle = VehicleList.getInstance().find(vehiclePlate);
+
+        if (vehicle != null) {
+            return listByVehicle.getOrDefault(vehicle, new HashSet<>());
+        }
+        return new HashSet<>();
+    }
+    
+    public Contract getContractByNumber(String contractNumber) {
+        for (HashSet<Contract> contracts : listByClient.values()) {
+            for (Contract contract : contracts) {
+                if (contract.getContractNum().equals(contractNumber)) {
+                    return contract;
+                }
+            }
+        }
+        return null;
+    }
+    
+    private void validateContract(Contract contrato) throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
+        validateClientAndVehicleExistence(contrato);
+        validateContractDates(contrato);
+        validateNoOverlap(contrato);
+    }
+    
+    private void validateClientAndVehicleExistence(Contract contrato) throws NoClientException, NoCarSelectedException {
+        Client client = ClientList.getInstance().find(contrato.getClient().getId());
+        if (client == null) {
+            throw new NoClientException();
+        }
+
+        Vehicle vehicle = VehicleList.getInstance().find(contrato.getVehicle().getPlate());
+        if (vehicle == null) {
+            throw new NoCarSelectedException();
+        }
+    }
+    
+    private void validateContractDates(Contract contrato) throws InvalidDateException {
+        if (!UtilDate.isNotPastDateTime(contrato.getStartTime())) {
+            throw new InvalidDateException();
+        }
+
+        if (contrato.getFinishTime().isBefore(contrato.getStartTime()) || contrato.getFinishTime().isEqual(contrato.getStartTime())) {
+            throw new InvalidDateException();
+        }
+    }
+    
+    private void validateNoOverlap(Contract contrato) throws OverlappingReservationException {
+        HashSet<Contract> existingContracts = getContractsByVehiclePlate(contrato.getVehicle().getPlate());
+        for (Contract existing : existingContracts) {
+            if (UtilDate.isOverlapping(contrato.getStartTime(), contrato.getFinishTime(), existing.getStartTime(), existing.getFinishTime())) {
+                throw new OverlappingReservationException();
+            }
+        }
+    }
+    
+    
     
 }

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  */
 public class Contract {
     private ReservationList list;
-    private int contractNum;
+    private String contractNum;
     private Client client;
     private Vehicle vehicle;
     private LocalDateTime startTime;
@@ -30,7 +30,7 @@ public class Contract {
     private TariffType tariff;
     private double totalAmount;
 
-    public Contract(int contractNum, Client client, Vehicle vehicle, LocalDateTime startTime, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDateTime startTime, LocalDateTime finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
         this.contractNum = contractNum;
@@ -45,7 +45,7 @@ public class Contract {
         list.createReservation(client, vehicle, startTime, finishTime);
     }
     
-    public Contract(int contractNum, Client client, Vehicle vehicle, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDateTime finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
         this.contractNum = contractNum;
@@ -60,7 +60,7 @@ public class Contract {
         list.createReservation(client, vehicle, null, finishTime);
     }
 
-    public Contract(int contractNum, Reservation reserva, TariffType tariff) {
+    public Contract(String contractNum, Reservation reserva, TariffType tariff) {
         this.list = ReservationList.getInstance();
         this.contractNum = contractNum;
         this.client = reserva.getClient();
@@ -115,6 +115,10 @@ public class Contract {
 
     public TariffType getTariff() {
         return tariff;
+    }
+
+    public String getContractNum() {
+        return contractNum;
     }
 
     public double getTotalAmount() {

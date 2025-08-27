@@ -129,7 +129,7 @@ public class ReservationList implements List<Vehicle> {
             LocalDateTime rStart = r.getStartTime();
             LocalDateTime rEnd   = r.getFinishTime();
 
-            boolean overlap = !rEnd.isBefore(start) && !rStart.isAfter(end);
+            boolean overlap = UtilDate.isOverlapping(rEnd, start, rStart, end); //overlap = !rEnd.isBefore(start) && !rStart.isAfter(end);
             if (overlap) {
                 return false;
             }
