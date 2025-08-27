@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
  */
 public class Contract {
     private ReservationList list;
+    private int contractNum;
     private Client client;
     private Vehicle vehicle;
     private LocalDateTime startTime;
@@ -29,9 +30,10 @@ public class Contract {
     private TariffType tariff;
     private double totalAmount;
 
-    public Contract(Client client, Vehicle vehicle, LocalDateTime startTime, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(int contractNum, Client client, Vehicle vehicle, LocalDateTime startTime, LocalDateTime finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
+        this.contractNum = contractNum;
         this.client = client;
         this.vehicle = vehicle;
         this.startTime = startTime;
@@ -43,8 +45,10 @@ public class Contract {
         list.createReservation(client, vehicle, startTime, finishTime);
     }
     
-    public Contract(Client client, Vehicle vehicle, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(int contractNum, Client client, Vehicle vehicle, LocalDateTime finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
+        this.list = ReservationList.getInstance();
+        this.contractNum = contractNum;
         this.client = client;
         this.vehicle = vehicle;
         this.startTime = LocalDateTime.now();
@@ -56,7 +60,9 @@ public class Contract {
         list.createReservation(client, vehicle, null, finishTime);
     }
 
-    public Contract(Reservation reserva, TariffType tariff) {
+    public Contract(int contractNum, Reservation reserva, TariffType tariff) {
+        this.list = ReservationList.getInstance();
+        this.contractNum = contractNum;
         this.client = reserva.getClient();
         this.vehicle = reserva.getCar();
         this.startTime = reserva.getStartTime();
@@ -85,6 +91,34 @@ public class Contract {
         if (this.state == ContractState.FINALIZED) return;
         this.state = ContractState.CANCELED;
         this.vehicle.setState(VehicleState.AVAILABLE);
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getFinishTime() {
+        return finishTime;
+    }
+
+    public ContractState getState() {
+        return state;
+    }
+
+    public TariffType getTariff() {
+        return tariff;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
     }
     
 }
