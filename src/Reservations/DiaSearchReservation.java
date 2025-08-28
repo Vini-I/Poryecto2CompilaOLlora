@@ -49,7 +49,8 @@ public class DiaSearchReservation extends javax.swing.JDialog {
         reservacion = manager.searchByCliente(id).get(row);
     }
     
-    private void loadTable() {
+    public void loadTable() {
+        model = (DefaultTableModel) tblReservations.getModel();
         List<Reservation> map = manager.searchByCliente(id);
         model.setRowCount(0);
         for (Reservation reserva : map) {
@@ -77,7 +78,7 @@ public class DiaSearchReservation extends javax.swing.JDialog {
         txtClient = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReservations = new javax.swing.JTable();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        btnSelect = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -121,22 +122,22 @@ public class DiaSearchReservation extends javax.swing.JDialog {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 680, 270));
 
-        jToggleButton1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jToggleButton1.setText("Seleccionar Reservacion");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSelect.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnSelect.setText("Seleccionar Reservacion");
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                btnSelectActionPerformed(evt);
             }
         });
-        getContentPane().add(jToggleButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, -1, 80));
+        getContentPane().add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, -1, 80));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         selectedReservation(tblReservations.getSelectedRow());
         this.dispose();
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_btnSelectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,10 +183,10 @@ public class DiaSearchReservation extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnSelect;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTable tblReservations;
     private javax.swing.JTextField txtClient;
     // End of variables declaration//GEN-END:variables

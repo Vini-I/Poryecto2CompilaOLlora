@@ -25,6 +25,7 @@ import Vehicles.VehicleManager;
 import Vehicles.VehicleType;
 import java.time.LocalDate;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -49,6 +50,7 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
      */
     public FrmContract() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         managerCt = ContractList.getInstance();
         model = (DefaultTableModel) tblContracts.getModel();
         sorter = new TableRowSorter<>(model);
@@ -122,8 +124,8 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     }
     
     private void loadTable(List<Contract> contractList) {
+        model = (DefaultTableModel) tblContracts.getModel();
         model.setRowCount(0);
-        
         
         for (Contract c : contractList) {
             Object[] row = {
@@ -220,7 +222,7 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         jLabel20 = new javax.swing.JLabel();
         txtContractState = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtYear.setEditable(false);
@@ -336,21 +338,37 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
 
         tblContracts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Numero contrato", "Placa", "Hora de inicio", "Hora de finalizacion", "Tarifa", "Total a cobrar"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblContracts.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblContractsMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblContracts);
+        if (tblContracts.getColumnModel().getColumnCount() > 0) {
+            tblContracts.getColumnModel().getColumn(0).setResizable(false);
+            tblContracts.getColumnModel().getColumn(1).setResizable(false);
+            tblContracts.getColumnModel().getColumn(2).setResizable(false);
+            tblContracts.getColumnModel().getColumn(3).setResizable(false);
+            tblContracts.getColumnModel().getColumn(4).setResizable(false);
+            tblContracts.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 920, 710));
 
@@ -466,6 +484,10 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         else return TariffType.MINIBUS;
     }
     
+    public void refreshTable() {
+        loadTable(managerCt.getAllContracts());
+    }
+    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         try {
             if (validateRequiere()) {
@@ -473,8 +495,8 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
                 return;
             }
 
-            Client client = managerCl.findClient(txtClient.getText());
-            Vehicle vehicle = managerV.findVehicle(txtPlate.getText());
+            client = managerCl.findClient(txtClient.getText());
+            vehicle = managerV.findVehicle(txtPlate.getText());
 
             if (client == null) {
                 UtilGui.showErrorMessage(this, "No se encontró un cliente con la cédula proporcionada.", "Cliente No Encontrado");
@@ -493,7 +515,7 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
 
             TariffType tariff = getTariffType(); 
 
-            Contract newContract = new Contract(newReservation, tariff);
+            Contract newContract = new Contract(managerCt.getNextContractNumber(), newReservation, tariff);
 
             managerCt.addContract(newContract);
 

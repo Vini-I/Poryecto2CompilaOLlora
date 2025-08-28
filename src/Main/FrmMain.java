@@ -35,8 +35,8 @@ public class FrmMain extends javax.swing.JFrame {
         frmEmployee = new FrmEmployee();
         frmVehicle = new FrmVehicle();
         frmClient = new FrmClient();
-        frmReservation = new FrmReservation();
         frmContract = new FrmContract();
+        frmReservation = new FrmReservation(frmContract);
     }
 
     /**

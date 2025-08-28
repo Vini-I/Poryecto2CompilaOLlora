@@ -20,8 +20,6 @@ import java.time.LocalDate;
  * @author autoa
  */
 public class Contract {
-    private static int contractCounter = 0;
-    
     private ReservationList list;
     private String contractNum;
     private Client client;
@@ -32,10 +30,10 @@ public class Contract {
     private TariffType tariff;
     private double totalAmount;
 
-    public Contract(Client client, Vehicle vehicle, LocalDate startTime, LocalDate finishTime, TariffType tariff) 
+    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDate startTime, LocalDate finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
-        this.contractNum = augmentContractNum();
+        this.contractNum = contractNum;
         this.client = client;
         this.vehicle = vehicle;
         this.startTime = startTime;
@@ -47,10 +45,10 @@ public class Contract {
         list.createReservation(client, vehicle, startTime, finishTime);
     }
     
-    public Contract(Client client, Vehicle vehicle, LocalDate finishTime, TariffType tariff) 
+    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDate finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
-        this.contractNum = augmentContractNum();
+        this.contractNum = contractNum;
         this.client = client;
         this.vehicle = vehicle;
         this.startTime = LocalDate.now();
@@ -62,9 +60,9 @@ public class Contract {
         list.createReservation(client, vehicle, null, finishTime);
     }
 
-    public Contract(Reservation reserva, TariffType tariff) {
+    public Contract(String contractNum, Reservation reserva, TariffType tariff) {
         this.list = ReservationList.getInstance();
-        this.contractNum = augmentContractNum();
+        this.contractNum = contractNum;
         this.client = reserva.getClient();
         this.vehicle = reserva.getCar();
         this.startTime = reserva.getStartTime();
@@ -93,11 +91,6 @@ public class Contract {
         if (this.state == ContractState.FINALIZED) return;
         this.state = ContractState.CANCELED;
         this.vehicle.setState(VehicleState.AVAILABLE);
-    }
-    
-    private String augmentContractNum() {
-        contractCounter++;
-        return Integer.toString(contractCounter);
     }
 
     public Client getClient() {

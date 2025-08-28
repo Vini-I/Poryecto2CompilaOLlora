@@ -4,6 +4,7 @@ import Clients.Client;
 import Clients.ClientManager;
 import Contracts.Contract;
 import Contracts.ContractList;
+import Contracts.FrmContract;
 import Contracts.TariffType;
 import Exceptions.*;
 import GuiList.Clearable;
@@ -36,30 +37,33 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
     private Vehicle vehicle;
     private TariffType tariff;
     private DiaSearchReservation frmSearch;
+    private FrmContract frmContract;
     
     /**
      * Creates new form FrmReservations
      */
-    public FrmReservation() {
+    public FrmReservation(FrmContract parent) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         initManagers();
-        initFrames();
+        initFrames(parent);
     }
     
-    private void initFrames() {
+    private void initFrames(FrmContract parent) {
         this.frmSearch = new DiaSearchReservation(this, true);
+        this.frmContract = parent;
     }
     
     private void initManagers() {
         managerV = new VehicleManager();
         managerCl = new ClientManager();
+        managerCr = ContractList.getInstance();
         managerR  = ReservationList.getInstance();
     }
     
      @Override
     public boolean validateRequiere() {
-        return UtilGui.validateRequiere(txtPlate, txtClient, txtFinalize);
+        return UtilGui.validateRequiere(txtPlate, txtClient, txtInitialize, txtFinalize);
     }
 
     @Override
@@ -68,8 +72,8 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
             try {
                 String id = txtClient.getText();
                 String plate = txtPlate.getText();
-                LocalDate initDate = UtilDate.toLocalDate(txtInitialize.getText());
-                LocalDate finishDate = UtilDate.toLocalDate(txtInitialize.getText());
+                LocalDate initDate = UtilDate.toLocalDate((txtInitialize.getText()));
+                LocalDate finishDate = UtilDate.toLocalDate(txtFinalize.getText());
                 tariff = getTariffType();
                 
                 cliente = managerCl.findClient(id);
@@ -81,21 +85,21 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 
                 vehicle = managerV.findVehicle(plate);
                 
-                if (initDate == null) managerR.createReservation(cliente, vehicle, null, finishDate);
-                else managerR.createReservation(cliente, vehicle, initDate, finishDate);
+                if (initDate == null) reservacion = managerR.createReservation(cliente, vehicle, null, finishDate);
+                else reservacion = managerR.createReservation(cliente, vehicle, initDate, finishDate);
                 
-                contrato = new Contract(reservacion, tariff);
+                contrato = new Contract(managerCr.getNextContractNumber(), reservacion, tariff);
             
                 managerCr.addContract(contrato);
+                
+                this.frmContract.refreshTable();
+                
+                UtilGui.showMessage(this, "La reservacion y el contrato numero: " + contrato.getContractNum(), " han sido creados");
+                clear();
                 
             } catch (NoClientException | NoCarSelectedException | InvalidDateException | OverlappingReservationException | ContractAlreadyExistsException e) {
                 UtilGui.showErrorMessage(this, e.getMessage(), "Error");
             }
-            
-            
-
-            UtilGui.showMessage(this, "La reservacion y el contrato numero: " + contrato.getContractNum(), " han sido creados");
-            clear();
         }else{
             UtilGui.showErrorMessage(this, "Faltan datos requeridos", "Error");
         }
@@ -677,6 +681,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
         String id = txtClient.getText();
         if (rList != null) {
             frmSearch.setIdFromFrm(id);
+            frmSearch.loadTable();
             frmSearch.setVisible(true);
             Reservation selectedRes = frmSearch.getSelectedReservation();
     
@@ -697,52 +702,6 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmReservation().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;

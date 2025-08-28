@@ -20,6 +20,7 @@ import java.util.List;
  * @author autoa
  */
 public class ContractList {
+    private static int contractCounter = 0;
     private static ContractList instance;
     private HashMap<Client, HashSet<Contract>> listByClient;
     private HashMap<Vehicle, HashSet<Contract>> listByVehicle;
@@ -29,6 +30,11 @@ public class ContractList {
             instance = new ContractList();
         }
         return instance;
+    }
+    
+    public String augmentContractNum() {
+        contractCounter++;
+        return String.valueOf(contractCounter);
     }
 
     private ContractList() {
@@ -130,12 +136,19 @@ public class ContractList {
     private void validateNoOverlap(Contract contrato) throws OverlappingReservationException {
         List<Contract> existingContracts = getContractsByVehiclePlate(contrato.getVehicle().getPlate());
         for (Contract existing : existingContracts) {
+            if (existing.getContractNum().equals(contrato.getContractNum())) {
+                continue;
+            }
+            
             if (UtilDate.isOverlapping(contrato.getStartTime(), contrato.getFinishTime(), existing.getStartTime(), existing.getFinishTime())) {
                 throw new OverlappingReservationException();
             }
         }
     }
-    
-    
+
+    public String getNextContractNumber() {
+        contractCounter++;
+        return String.valueOf(contractCounter);
+    }
     
 }
