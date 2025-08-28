@@ -32,6 +32,7 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
         initComponents();
         showPosition();
         showData();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -44,90 +45,149 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        btnModify = new javax.swing.JButton();
-        txtBirthdate = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        btnGoBack = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        txtMail = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        txtSalary = new javax.swing.JTextField();
+        btnModify = new javax.swing.JButton();
+        btnGoBack = new javax.swing.JButton();
+        txtBirthdate = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        cmbPosition = new javax.swing.JComboBox<>();
+        txtSalary = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtMail = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         txtPhone = new javax.swing.JFormattedTextField();
+        jLabel5 = new javax.swing.JLabel();
+        cmbPosition = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(800, 525));
+        setMinimumSize(new java.awt.Dimension(800, 525));
+        setPreferredSize(new java.awt.Dimension(800, 525));
+        setResizable(false);
+        setSize(new java.awt.Dimension(800, 525));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 39, -1, -1));
 
-        jLabel4.setText("Nacimiento");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 178, -1, -1));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Modificar Empleado");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, -1, 50));
+
+        btnModify.setBackground(new java.awt.Color(255, 255, 255));
+        btnModify.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        btnModify.setForeground(new java.awt.Color(0, 0, 0));
         btnModify.setText("Modificar");
         btnModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModifyActionPerformed(evt);
             }
         });
-        getContentPane().add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(41, 252, -1, -1));
+        jPanel1.add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, 200, -1));
 
-        txtBirthdate.setEditable(false);
-        getContentPane().add(txtBirthdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 206, 100, -1));
-
-        jLabel5.setText("Telefono");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(182, 78, -1, -1));
-
+        btnGoBack.setBackground(new java.awt.Color(255, 255, 255));
+        btnGoBack.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        btnGoBack.setForeground(new java.awt.Color(0, 0, 0));
         btnGoBack.setText("Regresar");
         btnGoBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoBackActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGoBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 252, -1, -1));
+        jPanel1.add(btnGoBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 400, 210, -1));
 
-        jLabel6.setText("Correo");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
-        getContentPane().add(txtMail, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 100, -1));
+        txtBirthdate.setEditable(false);
+        txtBirthdate.setBackground(new java.awt.Color(255, 255, 255));
+        txtBirthdate.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        txtBirthdate.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtBirthdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 200, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Modificar Empleado");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 22, -1, 50));
-
-        txtId.setEditable(false);
-        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 99, 100, -1));
-
-        jLabel7.setText("Puesto");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, -1, -1));
-
-        jLabel8.setText("Salario");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, -1, -1));
-
-        jLabel3.setText("Nombre");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 128, -1, -1));
-        getContentPane().add(txtSalary, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 100, -1));
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Nacimiento");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, -1, -1));
 
         txtName.setEditable(false);
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 151, 100, -1));
+        txtName.setBackground(new java.awt.Color(255, 255, 255));
+        txtName.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        txtName.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 200, 40));
 
-        jLabel9.setText("ID");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 77, -1, -1));
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Nombre");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, -1, -1));
 
-        cmbPosition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbPosition.setSelectedIndex(-1);
-        getContentPane().add(cmbPosition, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 100, -1));
+        txtId.setEditable(false);
+        txtId.setBackground(new java.awt.Color(255, 255, 255));
+        txtId.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        txtId.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 200, 40));
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Cedula");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, -1, -1));
+
+        txtSalary.setBackground(new java.awt.Color(255, 255, 255));
+        txtSalary.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        txtSalary.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtSalary, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, 190, 40));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Salario");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, -1, -1));
+
+        txtMail.setBackground(new java.awt.Color(255, 255, 255));
+        txtMail.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        txtMail.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtMail, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 190, 40));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Correo");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, -1, -1));
+
+        txtPhone.setBackground(new java.awt.Color(255, 255, 255));
+        txtPhone.setForeground(new java.awt.Color(0, 0, 0));
         try {
             txtPhone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        getContentPane().add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 100, -1));
+        txtPhone.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jPanel1.add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 190, 40));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Telefono");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, -1, -1));
+
+        cmbPosition.setBackground(new java.awt.Color(255, 255, 255));
+        cmbPosition.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        cmbPosition.setForeground(new java.awt.Color(0, 0, 0));
+        cmbPosition.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbPosition.setSelectedIndex(-1);
+        jPanel1.add(cmbPosition, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 120, 210, 40));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Puesto");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 80, -1, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/27-Edit_Text_256x256_35395.png"))); // NOI18N
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -193,6 +253,7 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
     private javax.swing.JButton btnModify;
     private javax.swing.JComboBox<String> cmbPosition;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -201,6 +262,7 @@ public class FrmModifyEmployee extends javax.swing.JFrame implements Updatable,R
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtBirthdate;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtMail;
