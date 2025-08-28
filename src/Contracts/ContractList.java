@@ -136,7 +136,7 @@ public class ContractList {
     private void validateNoOverlap(Contract contrato) throws OverlappingReservationException {
         List<Contract> existingContracts = getContractsByVehiclePlate(contrato.getVehicle().getPlate());
         for (Contract existing : existingContracts) {
-            if (existing.getContractNum().equals(contrato.getContractNum())) {
+            if (existing == contrato) {
                 continue;
             }
             

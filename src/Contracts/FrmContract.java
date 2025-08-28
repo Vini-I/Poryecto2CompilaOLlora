@@ -65,7 +65,12 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     
     @Override
     public boolean validateRequiere() {
-        return UtilGui.validateRequiere(txtPlate, txtClient, txtFinalize);
+        if (txtClient.getText().trim().isBlank()) return false;
+        if (txtPlate.getText().trim().isBlank()) return false;
+        if (txtInitialize.getText().trim().isBlank()) return false;
+        if (txtFinalize.getText().trim().isBlank()) return false;
+        //return UtilGui.validateRequiere(txtPlate, txtClient, txtFinalize);
+        return true;
     }
     
     @Override
@@ -136,22 +141,29 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     
     @Override
     public void clear() {
+        // Clear the main contract fields
         txtClient.setText("");
         txtPlate.setText("");
         txtContractNum.setText("");
-        txtClient.setText("");
-        txtPlate.setText("");
+
+        // Clear the date and time fields
         txtInitialize.setText("");
         txtFinalize.setText("");
+
+        // Clear the vehicle details
         txtBrand.setText("");
         txtModel.setText("");
         txtType.setText("");
         txtYear.setText("");
+
+        // Clear the tariff and total amount fields
         txtTariff.setText("");
         txtTotal.setText("");
-        txtContractNum.setText("");
+
+        // Clear the contract state
         txtContractState.setText("");
-        
+
+        // Reload the contracts table
         loadTable(managerCt.getAllContracts());
     }
     
@@ -205,7 +217,11 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     }
     
     public void add() {
-        try {
+        System.out.println("Cedula: " + txtClient.getText());
+System.out.println("Placa: " + txtPlate.getText());
+System.out.println("Fecha Inicio: " + txtInitialize.getText());
+System.out.println("Fecha Final: " + txtFinalize.getText());
+System.out.println("Tarifa: " + txtTariff.getText());try {
             if (validateRequiere()) {
                 UtilGui.showErrorMessage(this, "Por favor, llene todos los campos de información.", "Datos Requeridos");
                 return;
