@@ -1,5 +1,6 @@
 package Clients;
 
+import Exceptions.ActiveReservationException;
 import GuiList.Deletable;
 import GuiList.Updatable;
 import Utils.UtilGui;
@@ -68,10 +69,20 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
 
         @Override
     public void delete() {
-     //   if (Manager.remove(
-      //          client)) {
-            
-     //   }
+        int row = tblClientes.getSelectedRow();
+        selectedClient(row);
+        if (client != null) {
+            try {
+                int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas eliminar este vehiculo?", "Confirmar Eliminacion");
+                if (decision == JOptionPane.YES_OPTION) {
+                    Manager.removeClient(client);
+                    loadTable();
+                }
+
+            } catch (ActiveReservationException e) {
+                UtilGui.showErrorMessage(this, e.getMessage(), "Error al eliminar");
+            }
+        }
     }
 
     private void selectedClient(int row) {
@@ -95,9 +106,6 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
             loadTable();
         }
     }
-    
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,9 +126,9 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
         txtBusquedas = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        jPanel3.setBackground(java.awt.SystemColor.activeCaption);
+        jPanel3.setBackground(new java.awt.Color(0, 102, 153));
 
         jPanel4.setBackground(new java.awt.Color(118, 145, 175));
 
@@ -148,6 +156,9 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
                 .addContainerGap())
         );
 
+        btnCancelar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,8 +166,18 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
             }
         });
 
+        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
+        tblClientes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tblClientes.setForeground(new java.awt.Color(0, 0, 0));
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -167,15 +188,28 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
             new String [] {
                 "Id", "Nombre", "Fecha de nacimiento", "Edad", "Telefono", "Correo", "Licencia", "Tipo de lcencia"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblClientes.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblClientes);
 
+        txtBusquedas.setBackground(new java.awt.Color(255, 255, 255));
         txtBusquedas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBusquedasActionPerformed(evt);
             }
         });
 
+        btnUpdate.setBackground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
         btnUpdate.setText("Actualizar");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -244,12 +278,16 @@ public class DgClientsSearch extends javax.swing.JDialog implements Deletable, U
       int decision = UtilGui.showConfirmMessage(this, "¿Estas seguro que deseas cancelar la busqueda?", "Confirmar");
         if (decision == JOptionPane.YES_OPTION) {
             this.dispose();
-        }// TODO add your handling code here:
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        update();// TODO add your handling code here:
+        update();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        delete();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
