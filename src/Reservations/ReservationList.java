@@ -105,7 +105,7 @@ public class ReservationList implements List<Vehicle> {
         return true;
     }
     
-    public boolean createReservation(Client cliente, Vehicle vehiculo, LocalDate start, LocalDate finish)
+    public Reservation createReservation(Client cliente, Vehicle vehiculo, LocalDate start, LocalDate finish)
             throws NoClientException, NoCarSelectedException,  InvalidDateException, OverlappingReservationException {
         if (!Reservation.validateClient(cliente.getId())) {
             throw new NoClientException();
@@ -130,7 +130,7 @@ public class ReservationList implements List<Vehicle> {
         Reservation nueva = new Reservation(cliente, vehiculo, start, finish);
         map.putIfAbsent(vehiculo.getPlate(), new LinkedList<>());
         map.get(vehiculo.getPlate()).add(nueva);
-        return true;
+        return nueva;
     }
     
     public boolean modifyReservationDates(String placa, Reservation reserva, LocalDate newStart, LocalDate newFinish)

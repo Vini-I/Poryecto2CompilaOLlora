@@ -20,8 +20,10 @@ import java.time.LocalDate;
  * @author autoa
  */
 public class Contract {
+    private static int contractCounter = 0;
+    
     private ReservationList list;
-    private String contractNum = "0";
+    private String contractNum;
     private Client client;
     private Vehicle vehicle;
     private LocalDate startTime;
@@ -94,9 +96,8 @@ public class Contract {
     }
     
     private String augmentContractNum() {
-        int num = Integer.parseInt(contractNum);
-        num += 1;
-        return contractNum = Integer.toString(num);
+        contractCounter++;
+        return Integer.toString(contractCounter);
     }
 
     public Client getClient() {

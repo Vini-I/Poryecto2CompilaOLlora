@@ -73,6 +73,12 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 tariff = getTariffType();
                 
                 cliente = managerCl.findClient(id);
+                
+                if (cliente == null) {
+                    UtilGui.showErrorMessage(this, "No se encontró un cliente con la cédula proporcionada.", "Cliente No Encontrado");
+                    return;
+                }
+                
                 vehicle = managerV.findVehicle(plate);
                 
                 if (initDate == null) managerR.createReservation(cliente, vehicle, null, finishDate);
@@ -145,6 +151,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
         txtModel.setText("");
         txtType.setText("");
         txtYear.setText("");
+        txtTariff.setText("");
     }
 
     @Override
@@ -155,6 +162,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
             txtModel.setText(this.vehicle.getModel());
             txtType.setText(this.vehicle.getType().toString());
             txtYear.setText(String.valueOf(this.vehicle.getYear()));
+            txtTariff.setText(String.valueOf(getTariffType()));
         } else {
             clearCarFields();
         }
@@ -236,6 +244,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         btnSearchR = new javax.swing.JButton();
         btnConfirm = new javax.swing.JButton();
@@ -271,7 +280,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1920, 1080));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         btnSearchR.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnSearchR.setText("Buscar Reserva");
@@ -280,7 +289,15 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 btnSearchRActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSearchR, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 840, 325, 133));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 60;
+        gridBagConstraints.gridy = 73;
+        gridBagConstraints.gridwidth = 137;
+        gridBagConstraints.ipadx = 133;
+        gridBagConstraints.ipady = 90;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(74, 35, 0, 0);
+        getContentPane().add(btnSearchR, gridBagConstraints);
 
         btnConfirm.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnConfirm.setText("Confirmar Reserva");
@@ -289,103 +306,256 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 btnConfirmActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 840, 325, 133));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 73;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.ipadx = 96;
+        gridBagConstraints.ipady = 90;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(74, 21, 0, 0);
+        getContentPane().add(btnConfirm, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Detalles de la reserva:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 18;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 16;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Cedula:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 260, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Placa:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 260, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 28;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 0, 0);
+        getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Inicia:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 310, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 20, 0, 0);
+        getContentPane().add(jLabel4, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Finaliza:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 360, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
+        getContentPane().add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Tipo:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 300, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 28;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        getContentPane().add(jLabel6, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Fabricante:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 340, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 28;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        getContentPane().add(jLabel7, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Modelo:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 380, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 28;
+        gridBagConstraints.gridy = 32;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 36;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        getContentPane().add(jLabel8, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Año:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 420, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 28;
+        gridBagConstraints.gridy = 69;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        getContentPane().add(jLabel9, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Tarifa diaria:");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 420, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 69;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 0);
+        getContentPane().add(jLabel10, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("Apariencia fisica del vehiculo");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 460, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 71;
+        gridBagConstraints.gridwidth = 55;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 26, 0, 0);
+        getContentPane().add(jLabel11, gridBagConstraints);
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ToyotaCorolla.jpg"))); // NOI18N
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 510, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 72;
+        gridBagConstraints.gridwidth = 107;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 1, 0, 0);
+        getContentPane().add(jLabel12, gridBagConstraints);
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/GrupoDypurConjunto.png"))); // NOI18N
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 980));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 75;
+        gridBagConstraints.ipady = -14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jLabel13, gridBagConstraints);
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/BannerPartners.png"))); // NOI18N
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1500, 0, 384, 980));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 197;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 199;
+        gridBagConstraints.gridheight = 75;
+        gridBagConstraints.ipadx = -15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 25, 0, 1);
+        getContentPane().add(jLabel14, gridBagConstraints);
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/GrupoDypurSlogan.png"))); // NOI18N
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 1450, 210));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 198;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = -150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 150, 0, 0);
+        getContentPane().add(jLabel15, gridBagConstraints);
 
         txtYear.setEditable(false);
         txtYear.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtYear.setEnabled(false);
-        getContentPane().add(txtYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 420, 300, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 29;
+        gridBagConstraints.gridy = 69;
+        gridBagConstraints.gridwidth = 136;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 232;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 0, 0);
+        getContentPane().add(txtYear, gridBagConstraints);
 
         txtClient.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        getContentPane().add(txtClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 260, 230, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 162;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
+        getContentPane().add(txtClient, gridBagConstraints);
 
         txtTariff.setEditable(false);
         txtTariff.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtTariff.setEnabled(false);
-        getContentPane().add(txtTariff, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 420, 190, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 69;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 122;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 1, 0, 0);
+        getContentPane().add(txtTariff, gridBagConstraints);
 
         txtType.setEditable(false);
         txtType.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtType.setEnabled(false);
-        getContentPane().add(txtType, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 300, 290, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 134;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 222;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 1, 0, 0);
+        getContentPane().add(txtType, gridBagConstraints);
 
         txtBrand.setEditable(false);
         txtBrand.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtBrand.setEnabled(false);
-        getContentPane().add(txtBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 340, 230, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 33;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 132;
+        gridBagConstraints.gridheight = 17;
+        gridBagConstraints.ipadx = 162;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        getContentPane().add(txtBrand, gridBagConstraints);
 
         txtModel.setEditable(false);
         txtModel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtModel.setEnabled(false);
-        getContentPane().add(txtModel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 380, 250, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 32;
+        gridBagConstraints.gridy = 32;
+        gridBagConstraints.gridwidth = 133;
+        gridBagConstraints.gridheight = 37;
+        gridBagConstraints.ipadx = 182;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 12, 0, 0);
+        getContentPane().add(txtModel, gridBagConstraints);
 
         btnSearchV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/searchIcon.png"))); // NOI18N
         btnSearchV.addActionListener(new java.awt.event.ActionListener() {
@@ -393,22 +563,60 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 btnSearchVActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSearchV, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 260, 160, 90));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 194;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 8;
+        gridBagConstraints.ipadx = 102;
+        gridBagConstraints.ipady = 31;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 30, 0, 0);
+        getContentPane().add(btnSearchV, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setText("Buscar vehiculo");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(1330, 230, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 194;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 50, 0, 0);
+        getContentPane().add(jLabel16, gridBagConstraints);
 
         txtFinalize.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         txtFinalize.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        getContentPane().add(txtFinalize, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 360, 230, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridheight = 35;
+        gridBagConstraints.ipadx = 162;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 6, 0, 0);
+        getContentPane().add(txtFinalize, gridBagConstraints);
 
         txtInitialize.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         txtInitialize.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        getContentPane().add(txtInitialize, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 310, 250, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 15;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.ipadx = 182;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(txtInitialize, gridBagConstraints);
 
         txtPlate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        getContentPane().add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 260, 290, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 31;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 134;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 222;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 1, 0, 0);
+        getContentPane().add(txtPlate, gridBagConstraints);
 
         btnModify.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnModify.setText("Modificar Reserva");
@@ -417,7 +625,15 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 btnModifyActionPerformed(evt);
             }
         });
-        getContentPane().add(btnModify, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 840, 325, 133));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 18;
+        gridBagConstraints.gridy = 73;
+        gridBagConstraints.gridwidth = 29;
+        gridBagConstraints.ipadx = 101;
+        gridBagConstraints.ipady = 90;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(74, 45, 0, 0);
+        getContentPane().add(btnModify, gridBagConstraints);
 
         btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/clearIcon.png"))); // NOI18N
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -425,11 +641,25 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
                 btnClearActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 260, 160, 90));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 8;
+        gridBagConstraints.ipadx = 102;
+        gridBagConstraints.ipady = 31;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 21, 0, 0);
+        getContentPane().add(btnClear, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel17.setText("Limpiar datos");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 230, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 41, 0, 0);
+        getContentPane().add(jLabel17, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

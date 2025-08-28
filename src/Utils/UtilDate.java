@@ -1,7 +1,6 @@
 
 package Utils;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -40,11 +39,11 @@ public abstract class UtilDate {
     }
 
     public static boolean periodIsValid(LocalDate date1, LocalDate date2) {
-        return Duration.between(date1, date2).toDays() >= 1 && Duration.between(date1, date2).toDays() <=30;
+        return Period.between(date1, date2).getDays() >= 1 && Period.between(date1, date2).getDays() <=30;
     }
     
     public static int periodDuration(LocalDate date1, LocalDate date2) {
-        return (int) Duration.between(date1, date2).toDays();
+        return (int) Period.between(date1, date2).getDays();
     }
     
     public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
