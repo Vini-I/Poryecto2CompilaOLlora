@@ -9,6 +9,7 @@ import Utils.UtilGui;
 import Vehicles.FrmVehicle;
 import Employees.FrmEmployee;
 import Reservations.FrmReservation;
+import Contracts.FrmContract;
 import java.awt.Desktop;
 import java.net.URI;
 import javax.swing.JFrame;
@@ -23,16 +24,19 @@ public class FrmMain extends javax.swing.JFrame {
         FrmVehicle frmVehicle;
         FrmReservation frmReservation;
         FrmClient frmClient;
+        FrmContract frmContract;
+        
     /**
      * Creates new form FrmMain
      */
     public FrmMain() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-       frmEmployee = new FrmEmployee();
-       frmVehicle = new FrmVehicle();
-       frmClient = new FrmClient();
-       frmReservation = new FrmReservation();
+        frmEmployee = new FrmEmployee();
+        frmVehicle = new FrmVehicle();
+        frmClient = new FrmClient();
+        frmReservation = new FrmReservation();
+        frmContract = new FrmContract();
     }
 
     /**
@@ -146,6 +150,11 @@ public class FrmMain extends javax.swing.JFrame {
         btnContract.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/gestionContratoIcon.png"))); // NOI18N
         btnContract.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnContract.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnContract.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContractActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(btnContract, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 40, 120, 60));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -303,6 +312,10 @@ public class FrmMain extends javax.swing.JFrame {
     private void btnReserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReserveActionPerformed
         frmReservation.show();
     }//GEN-LAST:event_btnReserveActionPerformed
+
+    private void btnContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContractActionPerformed
+        frmContract.show();
+    }//GEN-LAST:event_btnContractActionPerformed
 
     /**
      * @param args the command line arguments
