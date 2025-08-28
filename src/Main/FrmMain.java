@@ -4,9 +4,11 @@
  */
 package Main;
 
+import Clients.FrmClient;
 import Utils.UtilGui;
 import Vehicles.FrmVehicle;
 import Employees.FrmEmployee;
+import Reservations.FrmReservation;
 import java.awt.Desktop;
 import java.net.URI;
 import javax.swing.JFrame;
@@ -17,13 +19,20 @@ import javax.swing.JOptionPane;
  * @author rodol
  */
 public class FrmMain extends javax.swing.JFrame {
-
+        FrmEmployee frmEmployee;
+        FrmVehicle frmVehicle;
+        FrmReservation frmReservation;
+        FrmClient frmClient;
     /**
      * Creates new form FrmMain
      */
     public FrmMain() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+       frmEmployee = new FrmEmployee();
+       frmVehicle = new FrmVehicle();
+       frmClient = new FrmClient();
+       frmReservation = new FrmReservation();
     }
 
     /**
@@ -79,6 +88,11 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnReserve.setBackground(new java.awt.Color(255, 255, 255));
         btnReserve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/gestionReservasIcon.png"))); // NOI18N
+        btnReserve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReserveActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(btnReserve, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 40, 120, 60));
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -116,6 +130,11 @@ public class FrmMain extends javax.swing.JFrame {
 
         btnClient.setBackground(new java.awt.Color(255, 255, 255));
         btnClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/gestionClienteIcon.png"))); // NOI18N
+        btnClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(btnClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 40, 120, 60));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -256,8 +275,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehicleActionPerformed
-        FrmVehicle frmVehicle = new FrmVehicle();
-        frmVehicle.setVisible(true);
+        frmVehicle.show();
     }//GEN-LAST:event_btnVehicleActionPerformed
 
     private void btnMoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoreActionPerformed
@@ -275,9 +293,16 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMoreActionPerformed
 
     private void btnEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeeActionPerformed
-        FrmEmployee frmEmployee = new FrmEmployee();
-        frmEmployee.setVisible(true);
+        frmEmployee.show();
     }//GEN-LAST:event_btnEmployeeActionPerformed
+
+    private void btnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientActionPerformed
+        frmClient.show();
+    }//GEN-LAST:event_btnClientActionPerformed
+
+    private void btnReserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReserveActionPerformed
+        frmReservation.show();
+    }//GEN-LAST:event_btnReserveActionPerformed
 
     /**
      * @param args the command line arguments
