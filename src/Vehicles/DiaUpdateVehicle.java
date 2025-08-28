@@ -74,14 +74,14 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Año");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, -1, -1));
 
-        rbRented.setBackground(new java.awt.Color(255, 255, 255));
+        rbRented.setBackground(new java.awt.Color(0, 102, 204));
         btgStates.add(rbRented);
         rbRented.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        rbRented.setForeground(new java.awt.Color(0, 0, 0));
+        rbRented.setForeground(new java.awt.Color(255, 255, 255));
         rbRented.setText("Rentado");
         jPanel1.add(rbRented, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 280, 98, -1));
 
@@ -94,14 +94,15 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         txtYear.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jPanel1.add(txtYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, 200, 40));
 
-        rbMaintenance.setBackground(new java.awt.Color(255, 255, 255));
+        rbMaintenance.setBackground(new java.awt.Color(0, 102, 204));
         btgStates.add(rbMaintenance);
         rbMaintenance.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        rbMaintenance.setForeground(new java.awt.Color(0, 0, 0));
+        rbMaintenance.setForeground(new java.awt.Color(255, 255, 255));
         rbMaintenance.setText("Mantenimiento");
         jPanel1.add(rbMaintenance, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 320, -1, -1));
 
         txtType.setBackground(new java.awt.Color(255, 255, 255));
+        txtType.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         txtType.setForeground(new java.awt.Color(0, 0, 0));
         txtType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         txtType.setSelectedIndex(-1);
@@ -116,12 +117,12 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 240, -1, 30));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Estado");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 210, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Tipo");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 130, -1, -1));
 
@@ -135,7 +136,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         jPanel1.add(txtPlate, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 200, 40));
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/carIcon.png"))); // NOI18N
         jLabel1.setText("Actualizar Vehiculo");
@@ -144,12 +145,12 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 700, -1));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Placa");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Marca");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, -1, -1));
 
@@ -160,7 +161,7 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         jPanel1.add(txtBrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 200, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Modelo");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, -1));
 
@@ -178,10 +179,10 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 420, 110, 70));
 
-        rbAvailable.setBackground(new java.awt.Color(255, 255, 255));
+        rbAvailable.setBackground(new java.awt.Color(0, 102, 204));
         btgStates.add(rbAvailable);
         rbAvailable.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        rbAvailable.setForeground(new java.awt.Color(0, 0, 0));
+        rbAvailable.setForeground(new java.awt.Color(255, 255, 255));
         rbAvailable.setText("Disponible");
         jPanel1.add(rbAvailable, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 240, 110, -1));
 
