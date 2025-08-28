@@ -67,10 +67,10 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
         btnClear = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(51, 102, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnAdd.setBackground(new java.awt.Color(255, 255, 255));
@@ -133,7 +133,11 @@ public class FrmVehicle extends javax.swing.JFrame implements Requireable, Savea
 
         txtYear.setBackground(new java.awt.Color(255, 255, 255));
         txtYear.setForeground(new java.awt.Color(0, 0, 0));
-        txtYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("####"))));
+        try {
+            txtYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         txtYear.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jPanel1.add(txtYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 330, 260, 68));
 

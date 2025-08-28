@@ -67,9 +67,9 @@ public class DiaUpdateVehicle extends javax.swing.JDialog implements Requireable
         btnUpdate = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(51, 102, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 204));
         jPanel1.setPreferredSize(new java.awt.Dimension(974, 544));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
