@@ -51,10 +51,16 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     public FrmContract() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        managerCt = ContractList.getInstance();
+        initManagers();
         model = (DefaultTableModel) tblContracts.getModel();
         sorter = new TableRowSorter<>(model);
         tblContracts.setRowSorter(sorter);
+    }
+    
+    private void initManagers() {
+        managerCt = ContractList.getInstance();
+        managerCl = new ClientManager();
+        managerV = new VehicleManager();
     }
     
     @Override
@@ -101,11 +107,33 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         txtPlate.setText(contrato.getVehicle().getPlate());
         txtInitialize.setText(UtilDate.toString(contrato.getStartTime()));
         txtFinalize.setText(UtilDate.toString(contrato.getFinishTime()));
+        txtBrand.setText(contrato.getVehicle().getBrand());
+        txtModel.setText(contrato.getVehicle().getModel());
+        txtType.setText(contrato.getVehicle().getType().toString());
+        txtYear.setText(String.valueOf(contrato.getVehicle().getYear()));
         txtTariff.setText(String.valueOf(contrato.getTariff()));
         txtTotal.setText(String.valueOf(contrato.getTotalAmount()));
         txtContractState.setText(contrato.getState().toString());
     }
-
+    
+    public void showVehicleData(Vehicle vehicle) {
+        if (vehicle != null) {
+            txtBrand.setText(vehicle.getBrand());
+            txtModel.setText(vehicle.getModel());
+            txtType.setText(vehicle.getType().toString());
+            txtYear.setText(String.valueOf(vehicle.getYear()));
+        }
+    }
+    
+    private TariffType getTariffType() {
+        if (VehicleType.SEDAN.equals(txtType.getText())) return TariffType.SEDAN;
+        else if (VehicleType.SUV.equals(txtType.getText())) return TariffType.SUV;
+        else if (VehicleType.PICKUP.equals(txtType.getText())) return TariffType.PICKUP;
+        else if (VehicleType.VAN.equals(txtType.getText())) return TariffType.VAN;
+        else if (VehicleType.MINIVAN.equals(txtType.getText())) return TariffType.MINIVAN;
+        else return TariffType.MINIBUS;
+    }
+    
     @Override
     public void clear() {
         txtClient.setText("");
@@ -115,6 +143,10 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         txtPlate.setText("");
         txtInitialize.setText("");
         txtFinalize.setText("");
+        txtBrand.setText("");
+        txtModel.setText("");
+        txtType.setText("");
+        txtYear.setText("");
         txtTariff.setText("");
         txtTotal.setText("");
         txtContractNum.setText("");
@@ -148,7 +180,7 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
                 this.vehicle = managerV.findVehicle(plate);
 
                 if (this.vehicle != null) {
-                    showData();
+                    showVehicleData(this.vehicle);
                 } else {
                     this.vehicle = null;
                     clearCarFields();
@@ -170,6 +202,83 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         txtYear.setText("");
         txtTariff.setText("");
         txtTotal.setText("");
+    }
+    
+    public void add() {
+        try {
+            if (validateRequiere()) {
+                UtilGui.showErrorMessage(this, "Por favor, llene todos los campos de información.", "Datos Requeridos");
+                return;
+            }
+
+            client = managerCl.findClient(txtClient.getText());
+            vehicle = managerV.findVehicle(txtPlate.getText());
+
+            if (client == null) {
+                UtilGui.showErrorMessage(this, "No se encontró un cliente con la cédula proporcionada.", "Cliente No Encontrado");
+                return;
+            }
+
+            if (vehicle == null) {
+                UtilGui.showErrorMessage(this, "No se encontró un vehículo con la placa proporcionada.", "Vehículo No Encontrado");
+                return;
+            }
+
+            LocalDate startDate = UtilDate.toLocalDate(String.valueOf(txtInitialize.getText()));
+            LocalDate endDate = UtilDate.toLocalDate(String.valueOf(txtFinalize.getText()));
+
+            Reservation newReservation = ReservationList.getInstance().createReservation(client, vehicle, startDate, endDate);
+
+            TariffType tariff = getTariffType(); 
+
+            Contract newContract = new Contract(managerCt.getNextContractNumber(), newReservation, tariff);
+
+            managerCt.addContract(newContract);
+
+            UtilGui.showMessage(this, "Contrato agregado con éxito.", "Contrato Creado");
+
+            txtClient.setText("");
+            txtPlate.setText("");
+
+            loadTable(managerCt.getAllContracts());
+
+        } catch (ContractAlreadyExistsException | InvalidDateException | NoCarSelectedException | NoClientException | OverlappingReservationException e) {
+            UtilGui.showErrorMessage(this, "Error al agregar el contrato: " + e.getMessage(), "Error");
+        }
+    }
+    
+    public void finalizeContract() {
+        if (this.contrato == null) {
+            UtilGui.showErrorMessage(this, "Debe seleccionar un contrato para finalizar.", "Error");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea finalizar este contrato?", "Confirmar", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.contrato.finalizeContract();
+            UtilGui.showMessage(this, "El contrato ha sido finalizado con éxito.", "Contrato Finalizado");
+
+            loadTable(managerCt.getAllContracts());
+            showData();
+        }
+    }
+    
+    public void cancelContract() {
+        if (this.contrato == null) {
+            UtilGui.showErrorMessage(this, "Debe seleccionar un contrato para cancelar.", "Error");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea cancelar este contrato?", "Confirmar", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.contrato.cancelContract();
+            UtilGui.showMessage(this, "El contrato ha sido cancelado.", "Contrato Cancelado");
+
+            loadTable(managerCt.getAllContracts());
+            showData();
+        }
     }
 
     /**
@@ -221,6 +330,8 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         btnCancel = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         txtContractState = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -370,7 +481,7 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
             tblContracts.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 920, 710));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 920, 570));
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 10, 790));
@@ -448,6 +559,23 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
         txtContractState.setEnabled(false);
         getContentPane().add(txtContractState, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 610, 240, -1));
 
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnSearch.setText("Buscar contrato");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(379, 757, 770, 130));
+
+        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/update2Icon.png"))); // NOI18N
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 757, 140, 130));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -474,97 +602,30 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
             }
         }
     }//GEN-LAST:event_tblContractsMouseClicked
-
-    private TariffType getTariffType() {
-        if (VehicleType.SEDAN.equals(txtType.getText())) return TariffType.SEDAN;
-        else if (VehicleType.SUV.equals(txtType.getText())) return TariffType.SUV;
-        else if (VehicleType.PICKUP.equals(txtType.getText())) return TariffType.PICKUP;
-        else if (VehicleType.VAN.equals(txtType.getText())) return TariffType.VAN;
-        else if (VehicleType.MINIVAN.equals(txtType.getText())) return TariffType.MINIVAN;
-        else return TariffType.MINIBUS;
-    }
     
     public void refreshTable() {
         loadTable(managerCt.getAllContracts());
     }
     
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        try {
-            if (validateRequiere()) {
-                UtilGui.showErrorMessage(this, "Por favor, llene todos los campos de información.", "Datos Requeridos");
-                return;
-            }
-
-            client = managerCl.findClient(txtClient.getText());
-            vehicle = managerV.findVehicle(txtPlate.getText());
-
-            if (client == null) {
-                UtilGui.showErrorMessage(this, "No se encontró un cliente con la cédula proporcionada.", "Cliente No Encontrado");
-                return;
-            }
-
-            if (vehicle == null) {
-                UtilGui.showErrorMessage(this, "No se encontró un vehículo con la placa proporcionada.", "Vehículo No Encontrado");
-                return;
-            }
-
-            LocalDate startDate = UtilDate.toLocalDate(String.valueOf(txtInitialize.getText()));
-            LocalDate endDate = UtilDate.toLocalDate(String.valueOf(txtFinalize.getText()));
-
-            Reservation newReservation = ReservationList.getInstance().createReservation(client, vehicle, startDate, endDate);
-
-            TariffType tariff = getTariffType(); 
-
-            Contract newContract = new Contract(managerCt.getNextContractNumber(), newReservation, tariff);
-
-            managerCt.addContract(newContract);
-
-            UtilGui.showMessage(this, "Contrato agregado con éxito.", "Contrato Creado");
-
-            txtClient.setText("");
-            txtPlate.setText("");
-
-            loadTable(managerCt.getAllContracts());
-
-        } catch (ContractAlreadyExistsException | InvalidDateException | NoCarSelectedException | NoClientException | OverlappingReservationException e) {
-            UtilGui.showErrorMessage(this, "Error al agregar el contrato: " + e.getMessage(), "Error");
-        }
+        add();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnFinalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizeActionPerformed
-        if (this.contrato == null) {
-            UtilGui.showErrorMessage(this, "Debe seleccionar un contrato para finalizar.", "Error");
-            return;
-        }
-
-        // Optional: Add a confirmation dialog
-        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea finalizar este contrato?", "Confirmar", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            this.contrato.finalizeContract();
-            UtilGui.showMessage(this, "El contrato ha sido finalizado con éxito.", "Contrato Finalizado");
-
-            loadTable(managerCt.getAllContracts());
-            showData();
-        }
+        finalizeContract();
     }//GEN-LAST:event_btnFinalizeActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        if (this.contrato == null) {
-            UtilGui.showErrorMessage(this, "Debe seleccionar un contrato para cancelar.", "Error");
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea cancelar este contrato?", "Confirmar", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            this.contrato.cancelContract();
-            UtilGui.showMessage(this, "El contrato ha sido cancelado.", "Contrato Cancelado");
-
-            loadTable(managerCt.getAllContracts());
-            showData();
-        }
+        cancelContract();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        search();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        refreshTable();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -606,6 +667,8 @@ public class FrmContract extends javax.swing.JFrame  implements Requireable, Sav
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnFinalize;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSearchV;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

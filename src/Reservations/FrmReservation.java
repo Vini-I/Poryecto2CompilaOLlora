@@ -19,6 +19,7 @@ import Vehicles.VehicleManager;
 import Vehicles.VehicleType;
 import java.time.LocalDate;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -167,6 +168,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
             txtType.setText(this.vehicle.getType().toString());
             txtYear.setText(String.valueOf(this.vehicle.getYear()));
             txtTariff.setText(String.valueOf(getTariffType()));
+            updateCarPreview(this.vehicle);
         } else {
             clearCarFields();
         }
@@ -233,11 +235,59 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
         txtPlate.setText(res.getCar().getPlate());
         txtInitialize.setText(UtilDate.toString(res.getStartTime()));
         txtFinalize.setText(UtilDate.toString(res.getFinishTime()));
-
+        
         txtBrand.setText(res.getCar().getBrand());
         txtModel.setText(res.getCar().getModel());
-        txtType.setText(res.getCar().getType().toString());
+        txtType.setText(String.valueOf(getTypeTxt(res.getCar().getPlate())));
         txtYear.setText(String.valueOf(res.getCar().getYear()));
+        txtTariff.setText(String.valueOf(getTariffType()));
+    }
+    
+    public void updateCarPreview(Vehicle vehicle) {
+    if (vehicle == null) {
+        lblCarPreview.setIcon(null);
+        return;
+    }
+
+    String imagePath = null;
+        VehicleType type = vehicle.getType();
+
+        switch (type) {
+            case SEDAN:
+                imagePath = "/Images/ToyotaCorolla.jpg";
+                break;
+            case SUV:
+                imagePath = "/Images/NissanPathfinder.png";
+                break;
+            case MINIVAN:
+                imagePath = "/Images/ToyotaSienna.jpg";
+                break;
+            case PICKUP:
+                imagePath = "/Images/ToyotaTacoma.jpg";
+                break;
+            case VAN:
+                imagePath = "/Images/SubaruVan.jpg";
+                break;
+            case MINIBUS:
+                imagePath = "/Images/HyundaiCounty.png";
+                break;
+            default:
+                lblCarPreview.setIcon(null);
+                return;
+        }
+
+        try {
+            java.net.URL imgURL = getClass().getResource(imagePath);
+            if (imgURL != null) {
+                lblCarPreview.setIcon(new ImageIcon(imgURL));
+            } else {
+                System.err.println("Couldn't find image: " + imagePath);
+                lblCarPreview.setIcon(null);
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + imagePath + " - " + e.getMessage());
+            lblCarPreview.setIcon(null);
+        }
     }
     
     /**
@@ -263,7 +313,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        lblCarPreview = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -444,15 +494,15 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
         gridBagConstraints.insets = new java.awt.Insets(5, 26, 0, 0);
         getContentPane().add(jLabel11, gridBagConstraints);
 
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ToyotaCorolla.jpg"))); // NOI18N
+        lblCarPreview.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCarPreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ToyotaCorolla.jpg"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 72;
         gridBagConstraints.gridwidth = 107;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 1, 0, 0);
-        getContentPane().add(jLabel12, gridBagConstraints);
+        getContentPane().add(lblCarPreview, gridBagConstraints);
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/GrupoDypurConjunto.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -712,7 +762,6 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -726,6 +775,7 @@ public class FrmReservation extends javax.swing.JFrame implements Requireable, S
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblCarPreview;
     private javax.swing.JTextField txtBrand;
     private javax.swing.JTextField txtClient;
     private javax.swing.JFormattedTextField txtFinalize;
