@@ -3,7 +3,6 @@ package Utils;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
@@ -36,23 +35,19 @@ public abstract class UtilDate {
         return year >= minYear && year <= currentYear;
     }
     
-    public static boolean isNotPastDateTime(LocalDateTime date) {
-        return !date.isBefore(LocalDateTime.now());
+    public static boolean isNotPastDate(LocalDate date) {
+        return !date.isBefore(LocalDate.now());
     }
 
-    public static boolean periodIsValid(LocalDateTime date1, LocalDateTime date2) {
+    public static boolean periodIsValid(LocalDate date1, LocalDate date2) {
         return Duration.between(date1, date2).toDays() >= 1 && Duration.between(date1, date2).toDays() <=30;
     }
     
-    public static boolean isNotFutureDateTime(LocalDateTime date1, LocalDateTime date2) {
-        return Duration.between(date1, date2).toNanos() >=1;
-    }
-    
-    public static int periodDuration(LocalDateTime date1, LocalDateTime date2) {
+    public static int periodDuration(LocalDate date1, LocalDate date2) {
         return (int) Duration.between(date1, date2).toDays();
     }
     
-    public static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+    public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         return start1.isBefore(end2) && end1.isAfter(start2);
     }
 }

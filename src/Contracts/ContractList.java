@@ -106,7 +106,7 @@ public class ContractList {
     }
     
     private void validateContractDates(Contract contrato) throws InvalidDateException {
-        if (!UtilDate.isNotPastDateTime(contrato.getStartTime())) {
+        if (!UtilDate.isNotPastDate(contrato.getStartTime())) {
             throw new InvalidDateException();
         }
 

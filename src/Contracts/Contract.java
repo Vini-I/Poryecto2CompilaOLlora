@@ -13,7 +13,7 @@ import Exceptions.OverlappingReservationException;
 import Reservations.*;
 import Vehicles.Vehicle;
 import Vehicles.VehicleState;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  *
@@ -21,19 +21,19 @@ import java.time.LocalDateTime;
  */
 public class Contract {
     private ReservationList list;
-    private String contractNum;
+    private String contractNum = "0";
     private Client client;
     private Vehicle vehicle;
-    private LocalDateTime startTime;
-    private LocalDateTime finishTime;
+    private LocalDate startTime;
+    private LocalDate finishTime;
     private ContractState state;
     private TariffType tariff;
     private double totalAmount;
 
-    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDateTime startTime, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(Client client, Vehicle vehicle, LocalDate startTime, LocalDate finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
-        this.contractNum = contractNum;
+        this.contractNum = augmentContractNum();
         this.client = client;
         this.vehicle = vehicle;
         this.startTime = startTime;
@@ -45,13 +45,13 @@ public class Contract {
         list.createReservation(client, vehicle, startTime, finishTime);
     }
     
-    public Contract(String contractNum, Client client, Vehicle vehicle, LocalDateTime finishTime, TariffType tariff) 
+    public Contract(Client client, Vehicle vehicle, LocalDate finishTime, TariffType tariff) 
             throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
         this.list = ReservationList.getInstance();
-        this.contractNum = contractNum;
+        this.contractNum = augmentContractNum();
         this.client = client;
         this.vehicle = vehicle;
-        this.startTime = LocalDateTime.now();
+        this.startTime = LocalDate.now();
         this.finishTime = finishTime;
         this.state = ContractState.ACTIVE;
         this.tariff = tariff;
@@ -60,9 +60,9 @@ public class Contract {
         list.createReservation(client, vehicle, null, finishTime);
     }
 
-    public Contract(String contractNum, Reservation reserva, TariffType tariff) {
+    public Contract(Reservation reserva, TariffType tariff) {
         this.list = ReservationList.getInstance();
-        this.contractNum = contractNum;
+        this.contractNum = augmentContractNum();
         this.client = reserva.getClient();
         this.vehicle = reserva.getCar();
         this.startTime = reserva.getStartTime();
@@ -92,6 +92,12 @@ public class Contract {
         this.state = ContractState.CANCELED;
         this.vehicle.setState(VehicleState.AVAILABLE);
     }
+    
+    private String augmentContractNum() {
+        int num = Integer.parseInt(contractNum);
+        num += 1;
+        return contractNum = Integer.toString(num);
+    }
 
     public Client getClient() {
         return client;
@@ -101,11 +107,11 @@ public class Contract {
         return vehicle;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalDate getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getFinishTime() {
+    public LocalDate getFinishTime() {
         return finishTime;
     }
 
