@@ -10,8 +10,10 @@ import Exceptions.*;
 import Utils.UtilDate;
 import Vehicles.Vehicle;
 import Vehicles.VehicleList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  *
@@ -60,31 +62,41 @@ public class ContractList {
         }
     }
     
-    public HashSet<Contract> getContractsByClientId(String cedula) {
+    public List<Contract> getContractsByClientId(String cedula) {
         Client cliente = ClientList.getInstance().find(cedula);
-        
-        if (cliente != null) return listByClient.getOrDefault(cliente, new HashSet<>());
-        return new HashSet<>();
-    }
-    
-    public HashSet<Contract> getContractsByVehiclePlate(String vehiclePlate) {
-        Vehicle vehicle = VehicleList.getInstance().find(vehiclePlate);
-
-        if (vehicle != null) {
-            return listByVehicle.getOrDefault(vehicle, new HashSet<>());
+        if (cliente != null) {
+            return new ArrayList<>(listByClient.getOrDefault(cliente, new HashSet<>()));
         }
-        return new HashSet<>();
+        return new ArrayList<>();
     }
     
-    public Contract getContractByNumber(String contractNumber) {
+    public List<Contract> getContractsByVehiclePlate(String vehiclePlate) {
+        Vehicle vehicle = VehicleList.getInstance().find(vehiclePlate);
+        if (vehicle != null) {
+            return new ArrayList<>(listByVehicle.getOrDefault(vehicle, new HashSet<>()));
+        }
+        return new ArrayList<>();
+    }
+    
+    public List<Contract> getContractByNumber(String contractNumber) {
+        List<Contract> result = new ArrayList<>();
         for (HashSet<Contract> contracts : listByClient.values()) {
             for (Contract contract : contracts) {
                 if (contract.getContractNum().equals(contractNumber)) {
-                    return contract;
+                    result.add(contract);
+                    return result;
                 }
             }
         }
-        return null;
+        return result;
+    }
+    
+    public List<Contract> getAllContracts() {
+        List<Contract> allContracts = new ArrayList<>();
+        for (HashSet<Contract> contracts : listByClient.values()) {
+            allContracts.addAll(contracts);
+        }
+        return allContracts;
     }
     
     private void validateContract(Contract contrato) throws NoClientException, NoCarSelectedException, InvalidDateException, OverlappingReservationException {
@@ -116,7 +128,7 @@ public class ContractList {
     }
     
     private void validateNoOverlap(Contract contrato) throws OverlappingReservationException {
-        HashSet<Contract> existingContracts = getContractsByVehiclePlate(contrato.getVehicle().getPlate());
+        List<Contract> existingContracts = getContractsByVehiclePlate(contrato.getVehicle().getPlate());
         for (Contract existing : existingContracts) {
             if (UtilDate.isOverlapping(contrato.getStartTime(), contrato.getFinishTime(), existing.getStartTime(), existing.getFinishTime())) {
                 throw new OverlappingReservationException();

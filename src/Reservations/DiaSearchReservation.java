@@ -21,7 +21,6 @@ public class DiaSearchReservation extends javax.swing.JDialog {
     
     private DefaultTableModel model;
     private TableRowSorter<DefaultTableModel> sorter;
-    private RowFilter<DefaultTableModel, Object> rowFilter;
     
     /**
      * Creates new form NewJDialog
